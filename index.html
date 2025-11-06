@@ -1,0 +1,2940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyramason - Professional Ancient Sites Research Platform</title>
+    <meta name="description" content="Research-grade platform for 50,000+ ancient pyramids, megaliths, temples, and sacred sites worldwide with advanced analysis tools">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary-purple: #6A1B9A;
+            --dark-purple: #4A148C;
+            --light-purple: #9C27B0;
+            --accent-gold: #FFD700;
+            --dark-gold: #D4AF37;
+            --cyan: #00BCD4;
+            --light-cyan: #4FC3F7;
+            --cosmic-bg: #1a0033;
+            --panel-bg: rgba(26, 0, 51, 0.95);
+            --glass-bg: rgba(106, 27, 154, 0.15);
+        }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--cosmic-bg);
+            color: #fff;
+            overflow: hidden;
+        }
+        
+        /* 3D Pyramid Logo SVG */
+        .pyramason-logo {
+            width: 80px;
+            height: 80px;
+            display: inline-block;
+        }
+        
+        .pyramason-logo-small {
+            width: 40px;
+            height: 40px;
+        }
+        
+        /* Registration Modal with 3D Pyramid */
+        .registration-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 50%, #1a0033 100%);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .registration-content {
+            background: var(--panel-bg);
+            border: 3px solid var(--accent-gold);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.3);
+            animation: slideUp 0.6s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .registration-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .registration-title {
+            font-size: 32px;
+            text-align: center;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .registration-subtitle {
+            text-align: center;
+            color: var(--light-cyan);
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .registration-features {
+            margin: 25px 0;
+            padding: 20px;
+            background: var(--glass-bg);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .feature-item::before {
+            content: '✨';
+            font-size: 18px;
+        }
+        
+        .registration-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            color: var(--accent-gold);
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            padding: 12px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .registration-btn {
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            color: var(--dark-purple);
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .registration-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        .guest-btn {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .guest-btn:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            color: #fff;
+        }
+        
+        /* Map Container */
+        #map {
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        /* Compact Sidebar - Always Visible */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 140px;
+            height: 100vh;
+            background: linear-gradient(180deg, rgba(26, 0, 51, 0.98) 0%, rgba(74, 20, 140, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            border-right: 2px solid rgba(255, 215, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            padding: 15px 10px;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            margin-top: 8px;
+        }
+        
+        .search-section {
+            margin-bottom: 20px;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 8px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+        
+        .search-btn {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        
+        .search-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+        }
+        
+        .filter-section {
+            margin-bottom: 15px;
+        }
+        
+        .filter-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        
+        .filter-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .filter-item input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+        }
+        
+        .filter-item label {
+            font-size: 11px;
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .filter-count {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        /* User Avatar */
+        .user-avatar {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1001;
+        }
+        
+        .avatar-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .avatar-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        /* Tools Button */
+        .tools-btn {
+            position: fixed;
+            top: 80px;
+            right: 15px;
+            z-index: 1001;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+            border: 3px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tools-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(106, 27, 154, 0.5);
+        }
+        
+        /* Tools Panel */
+        .tools-panel {
+            position: fixed;
+            right: -420px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-left: 2px solid rgba(255, 215, 0, 0.3);
+            z-index: 1002;
+            transition: right 0.4s ease;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .tools-panel.active {
+            right: 0;
+        }
+        
+        .tools-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .tools-header h2 {
+            color: var(--accent-gold);
+            font-size: 24px;
+        }
+        
+        .close-panel-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close-panel-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+        
+        .tool-section {
+            margin-bottom: 25px;
+        }
+        
+        .tool-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .tool-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 8px;
+        }
+        
+        .tool-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 215, 0, 0.5);
+            transform: translateX(5px);
+        }
+        
+        .tool-icon {
+            font-size: 24px;
+            width: 32px;
+            text-align: center;
+        }
+        
+        .tool-info {
+            flex: 1;
+        }
+        
+        .tool-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .tool-desc {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 2px;
+        }
+        
+        /* Account Panel */
+        .account-panel {
+            position: fixed;
+            right: -420px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-left: 2px solid rgba(255, 215, 0, 0.3);
+            z-index: 1003;
+            transition: right 0.4s ease;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .account-panel.active {
+            right: 0;
+        }
+        
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .account-info h3 {
+            color: var(--accent-gold);
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .account-info p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+        }
+        
+        .profile-picture-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .profile-picture {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .upload-btn {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            color: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 12px;
+        }
+        
+        .upload-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+        
+        .account-section {
+            margin-bottom: 20px;
+        }
+        
+        .account-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+        }
+        
+        .account-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .account-stat-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .account-stat-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-gold);
+        }
+        
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 59, 48, 0.2);
+            border: 2px solid rgba(255, 59, 48, 0.5);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255, 59, 48, 0.4);
+            border-color: rgba(255, 59, 48, 0.8);
+        }
+        
+        /* Map Controls */
+        .map-controls {
+            position: fixed;
+            right: 15px;
+            bottom: 100px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .map-control-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(26, 0, 51, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .map-control-btn:hover {
+            background: rgba(106, 27, 154, 0.9);
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: scale(1.1);
+        }
+        
+        .map-control-btn.active {
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            color: var(--dark-purple);
+            border-color: var(--accent-gold);
+        }
+        
+        /* Context Menu */
+        .context-menu {
+            position: fixed;
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 8px;
+            min-width: 220px;
+            z-index: 2000;
+            display: none;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+        
+        .context-menu.active {
+            display: block;
+        }
+        
+        .context-menu-item {
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        
+        .context-menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(3px);
+        }
+        
+        .context-menu-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 6px 0;
+        }
+        
+        .coords-display {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 6px;
+            padding: 8px;
+            margin: 8px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .coords-display:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+        
+        /* Modal System */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 5000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--panel-bg);
+            border: 3px solid rgba(255, 215, 0, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: modalPop 0.3s ease;
+        }
+        
+        .modal-icon {
+            text-align: center;
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+        
+        .modal-title {
+            text-align: center;
+            font-size: 24px;
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .modal-message {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .modal-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            color: var(--dark-purple);
+        }
+        
+        .modal-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        .modal-btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .modal-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--cosmic-bg) 0%, #2d1b4e 50%, var(--cosmic-bg) 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s;
+        }
+        
+        .loading-pyramid {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 30px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .loading-text {
+            font-size: 20px;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--dark-gold));
+            width: 0%;
+            animation: loadingProgress 3s ease-in-out infinite;
+        }
+        
+        /* Custom Info Window */
+        .custom-info {
+            padding: 12px;
+            max-width: 300px;
+        }
+        
+        .info-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+        }
+        
+        .info-detail {
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #333;
+        }
+        
+        .info-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .info-btn {
+            flex: 1;
+            padding: 8px;
+            background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .info-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(106, 27, 154, 0.4);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes loadingProgress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+            }
+            
+            .sidebar-title {
+                font-size: 0;
+            }
+            
+            .filter-item label {
+                font-size: 0;
+            }
+            
+            .tools-panel, .account-panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <svg class="loading-pyramid" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="pyramidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:1" />
+                </linearGradient>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+            
+            <!-- 3D Pyramid -->
+            <path d="M 50 10 L 80 70 L 20 70 Z" fill="url(#pyramidGrad)" opacity="0.9" filter="url(#glow)"/>
+            <path d="M 50 10 L 80 70 L 50 50 Z" fill="#D4AF37" opacity="0.7"/>
+            <path d="M 50 10 L 20 70 L 50 50 Z" fill="#FFD700" opacity="0.5"/>
+            
+            <!-- Mystical Eye -->
+            <circle cx="50" cy="45" r="12" fill="rgba(26, 0, 51, 0.8)"/>
+            <circle cx="50" cy="45" r="6" fill="#00BCD4"/>
+            <circle cx="52" cy="43" r="2" fill="#fff"/>
+        </svg>
+        <div class="loading-text" id="loadingProgress">Initializing ancient wisdom...</div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+    
+    <!-- Registration Modal -->
+    <div class="registration-modal" id="registrationModal">
+        <div class="registration-content">
+            <div class="registration-logo">
+                <svg class="pyramason-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="regPyramidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="regGlow">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    
+                    <!-- 3D Pyramid with Depth -->
+                    <path d="M 50 15 L 85 75 L 15 75 Z" fill="url(#regPyramidGrad)" opacity="0.95" filter="url(#regGlow)"/>
+                    <path d="M 50 15 L 85 75 L 50 55 Z" fill="#D4AF37" opacity="0.7"/>
+                    <path d="M 50 15 L 15 75 L 50 55 Z" fill="#FFD700" opacity="0.6"/>
+                    
+                    <!-- All-Seeing Eye -->
+                    <circle cx="50" cy="48" r="14" fill="rgba(26, 0, 51, 0.9)"/>
+                    <circle cx="50" cy="48" r="8" fill="#00BCD4" opacity="0.9"/>
+                    <circle cx="52" cy="46" r="3" fill="#fff"/>
+                    
+                    <!-- Energy Rays -->
+                    <line x1="50" y1="15" x2="50" y2="5" stroke="#FFD700" stroke-width="2" opacity="0.6"/>
+                    <line x1="50" y1="15" x2="40" y2="10" stroke="#FFD700" stroke-width="1.5" opacity="0.4"/>
+                    <line x1="50" y1="15" x2="60" y2="10" stroke="#FFD700" stroke-width="1.5" opacity="0.4"/>
+                </svg>
+            </div>
+            <h1 class="registration-title">PYRAMASON</h1>
+            <p class="registration-subtitle">Professional Ancient Mysteries Research Platform</p>
+            
+            <div class="registration-features">
+                <div class="feature-item">Explore 50,000+ ancient sites worldwide</div>
+                <div class="feature-item">Advanced sacred geometry analysis</div>
+                <div class="feature-item">Astronomical alignment detection</div>
+                <div class="feature-item">Professional measurement tools</div>
+                <div class="feature-item">Academic citation generator</div>
+                <div class="feature-item">Export to CSV, GeoJSON, KML</div>
+            </div>
+            
+            <form class="registration-form" id="registrationForm" onsubmit="handleRegistration(event)">
+                <div class="form-group">
+                    <label for="regName">Your Name</label>
+                    <input type="text" id="regName" required placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email Address</label>
+                    <input type="email" id="regEmail" required placeholder="your.email@example.com">
+                </div>
+                <button type="submit" class="registration-btn">🔓 Start Exploring</button>
+                <button type="button" class="guest-btn" onclick="continueAsGuest()">Continue as Guest</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Map Container -->
+    <div id="map"></div>
+    
+    <!-- Compact Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <svg class="pyramason-logo-small" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="smallPyramidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <path d="M 50 20 L 80 70 L 20 70 Z" fill="url(#smallPyramidGrad)" opacity="0.9"/>
+                <path d="M 50 20 L 80 70 L 50 50 Z" fill="#D4AF37" opacity="0.7"/>
+                <path d="M 50 20 L 20 70 L 50 50 Z" fill="#FFD700" opacity="0.5"/>
+                <circle cx="50" cy="48" r="10" fill="rgba(26, 0, 51, 0.8)"/>
+                <circle cx="50" cy="48" r="5" fill="#00BCD4"/>
+            </svg>
+            <div class="sidebar-title">FILTERS</div>
+        </div>
+        
+        <!-- Search -->
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search...">
+                <button class="search-btn" onclick="searchSite()">🔍</button>
+            </div>
+        </div>
+        
+        <!-- Pyramids Filter -->
+        <div class="filter-section">
+            <div class="filter-title">🔺 PYRAMIDS</div>
+            <div class="filter-item">
+                <input type="checkbox" id="layer-pyramids" checked onchange="applyFilters()">
+                <label for="layer-pyramids">
+                    <span class="legend-dot" style="background: #4FC3F7;"></span>
+                    All <span class="filter-count" id="count-pyramids">(0)</span>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Megalithic Sites -->
+        <div class="filter-section">
+            <div class="filter-title">🗿 MEGALITHS</div>
+            <div class="filter-item">
+                <input type="checkbox" id="layer-standing-stones" onchange="toggleMegaliths('standing-stones')">
+                <label for="layer-standing-stones">
+                    <span class="legend-dot" style="background: #BA68C8;"></span>
+                    Stones <span class="filter-count" id="count-standing-stones">(0)</span>
+                </label>
+            </div>
+            <div class="filter-item">
+                <input type="checkbox" id="layer-burials" onchange="toggleMegaliths('burials')">
+                <label for="layer-burials">
+                    <span class="legend-dot" style="background: #9C27B0;"></span>
+                    Burials <span class="filter-count" id="count-burials">(0)</span>
+                </label>
+            </div>
+            <div class="filter-item">
+                <input type="checkbox" id="layer-rock-art" onchange="toggleMegaliths('rock-art')">
+                <label for="layer-rock-art">
+                    <span class="legend-dot" style="background: #E91E63;"></span>
+                    Rock Art <span class="filter-count" id="count-rock-art">(0)</span>
+                </label>
+            </div>
+            <div class="filter-item">
+                <input type="checkbox" id="layer-settlements" onchange="toggleMegaliths('settlements')">
+                <label for="layer-settlements">
+                    <span class="legend-dot" style="background: #673AB7;"></span>
+                    Settlements <span class="filter-count" id="count-settlements">(0)</span>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Sacred Geometry -->
+        <div class="filter-section">
+            <div class="filter-title">✨ GEOMETRY</div>
+            <div class="filter-item">
+                <input type="checkbox" id="sacred-triangles" onchange="detectSacredGeometry('triangles')">
+                <label for="sacred-triangles">
+                    <span class="legend-dot" style="background: #FFD700;"></span>
+                    Triangles
+                </label>
+            </div>
+            <div class="filter-item">
+                <input type="checkbox" id="sacred-circles" onchange="detectSacredGeometry('circles')">
+                <label for="sacred-circles">
+                    <span class="legend-dot" style="background: #00BCD4;"></span>
+                    Circles
+                </label>
+            </div>
+            <div class="filter-item">
+                <input type="checkbox" id="sacred-alignments" onchange="detectSacredGeometry('alignments')">
+                <label for="sacred-alignments">
+                    <span class="legend-dot" style="background: #4CAF50;"></span>
+                    Alignments
+                </label>
+            </div>
+        </div>
+    </div>
+    
+    <!-- User Avatar -->
+    <div class="user-avatar">
+        <button class="avatar-btn" id="userAvatar" onclick="toggleAccountPanel()">👤</button>
+    </div>
+    
+    <!-- Tools Button -->
+    <button class="tools-btn" onclick="toggleToolsPanel()">🛠️</button>
+    
+    <!-- Tools Panel -->
+    <div class="tools-panel" id="toolsPanel">
+        <div class="tools-header">
+            <h2>🔧 Research Tools</h2>
+            <button class="close-panel-btn" onclick="toggleToolsPanel()">×</button>
+        </div>
+        
+        <!-- Sacred Geometry Tools -->
+        <div class="tool-section">
+            <div class="tool-section-title">✨ Sacred Geometry Analysis</div>
+            <button class="tool-btn" onclick="analyzeSacredGeometry('golden-ratio')">
+                <span class="tool-icon">φ</span>
+                <div class="tool-info">
+                    <div class="tool-name">Golden Ratio Detector</div>
+                    <div class="tool-desc">Find φ (1.618) relationships</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="analyzeSacredGeometry('fibonacci')">
+                <span class="tool-icon">🌀</span>
+                <div class="tool-info">
+                    <div class="tool-name">Fibonacci Spiral</div>
+                    <div class="tool-desc">Sacred spiral patterns</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="analyzeSacredGeometry('vesica-piscis')">
+                <span class="tool-icon">◯◯</span>
+                <div class="tool-info">
+                    <div class="tool-name">Vesica Piscis</div>
+                    <div class="tool-desc">Sacred geometry circles</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="analyzeSacredGeometry('flower-of-life')">
+                <span class="tool-icon">✿</span>
+                <div class="tool-info">
+                    <div class="tool-name">Flower of Life</div>
+                    <div class="tool-desc">Ancient geometric pattern</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="analyzeSacredGeometry('platonic-solids')">
+                <span class="tool-icon">⬢</span>
+                <div class="tool-info">
+                    <div class="tool-name">Platonic Solids Grid</div>
+                    <div class="tool-desc">Earth grid systems</div>
+                </div>
+            </button>
+        </div>
+        
+        <!-- Astronomical Analysis -->
+        <div class="tool-section">
+            <div class="tool-section-title">🌟 Astronomical Analysis</div>
+            <button class="tool-btn" onclick="analyzeAstronomy('solstice')">
+                <span class="tool-icon">☀️</span>
+                <div class="tool-info">
+                    <div class="tool-name">Solstice Alignments</div>
+                    <div class="tool-desc">Summer/winter sunrise</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="analyzeAstronomy('equinox')">
+                <span class="tool-icon">⚖️</span>
+                <div class="tool-info">
+                    <div class="tool-name">Equinox Alignments</div>
+                    <div class="tool-desc">Spring/autumn balance</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="analyzeAstronomy('stars')">
+                <span class="tool-icon">⭐</span>
+                <div class="tool-info">
+                    <div class="tool-name">Star Alignments</div>
+                    <div class="tool-desc">Orion, Sirius, Pleiades</div>
+                </div>
+            </button>
+        </div>
+        
+        <!-- Measurement Tools -->
+        <div class="tool-section">
+            <div class="tool-section-title">📏 Measurement Tools</div>
+            <button class="tool-btn" onclick="startMeasurement('distance')">
+                <span class="tool-icon">↔️</span>
+                <div class="tool-info">
+                    <div class="tool-name">Distance Calculator</div>
+                    <div class="tool-desc">Measure between points</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="startMeasurement('area')">
+                <span class="tool-icon">▭</span>
+                <div class="tool-info">
+                    <div class="tool-name">Area Calculator</div>
+                    <div class="tool-desc">Polygon area measurement</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="startMeasurement('bearing')">
+                <span class="tool-icon">🧭</span>
+                <div class="tool-info">
+                    <div class="tool-name">Bearing/Azimuth</div>
+                    <div class="tool-desc">Directional heading</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="findAntipode()">
+                <span class="tool-icon">🌍</span>
+                <div class="tool-info">
+                    <div class="tool-name">Antipode Calculator</div>
+                    <div class="tool-desc">Opposite point on Earth</div>
+                </div>
+            </button>
+        </div>
+        
+        <!-- Drawing Tools -->
+        <div class="tool-section">
+            <div class="tool-section-title">✏️ Drawing Tools</div>
+            <button class="tool-btn" onclick="startDrawing('line')">
+                <span class="tool-icon">📐</span>
+                <div class="tool-info">
+                    <div class="tool-name">Draw Line</div>
+                    <div class="tool-desc">Connect points</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="startDrawing('circle')">
+                <span class="tool-icon">⭕</span>
+                <div class="tool-info">
+                    <div class="tool-name">Draw Circle</div>
+                    <div class="tool-desc">Circular regions</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="startDrawing('polygon')">
+                <span class="tool-icon">▱</span>
+                <div class="tool-info">
+                    <div class="tool-name">Draw Polygon</div>
+                    <div class="tool-desc">Custom shapes</div>
+                </div>
+            </button>
+        </div>
+        
+        <!-- Export & Academic Tools -->
+        <div class="tool-section">
+            <div class="tool-section-title">📚 Academic & Export</div>
+            <button class="tool-btn" onclick="generateCitation()">
+                <span class="tool-icon">📝</span>
+                <div class="tool-info">
+                    <div class="tool-name">Citation Generator</div>
+                    <div class="tool-desc">APA, MLA, Chicago, Harvard</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="exportData('csv')">
+                <span class="tool-icon">📊</span>
+                <div class="tool-info">
+                    <div class="tool-name">Export CSV</div>
+                    <div class="tool-desc">Spreadsheet format</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="exportData('geojson')">
+                <span class="tool-icon">🗺️</span>
+                <div class="tool-info">
+                    <div class="tool-name">Export GeoJSON</div>
+                    <div class="tool-desc">GIS standard format</div>
+                </div>
+            </button>
+            <button class="tool-btn" onclick="exportData('kml')">
+                <span class="tool-icon">📁</span>
+                <div class="tool-info">
+                    <div class="tool-name">Export KML</div>
+                    <div class="tool-desc">Google Earth format</div>
+                </div>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Account Panel -->
+    <div class="account-panel" id="accountPanel">
+        <div class="account-header">
+            <div class="account-info">
+                <h3 id="accountName">Guest User</h3>
+                <p id="accountEmail">guest@pyramason.com</p>
+            </div>
+            <button class="close-panel-btn" onclick="toggleAccountPanel()">×</button>
+        </div>
+        
+        <div class="profile-picture-section">
+            <div class="profile-picture" id="profilePicture">👤</div>
+            <button class="upload-btn" onclick="uploadProfilePicture()">Upload Photo</button>
+            <input type="file" id="profilePictureInput" accept="image/*" style="display:none" onchange="handleProfilePictureUpload(event)">
+        </div>
+        
+        <div class="account-section">
+            <div class="account-section-title">📊 Your Stats</div>
+            <div class="account-stat">
+                <span class="account-stat-label">Saved Favorites</span>
+                <span class="account-stat-value" id="accountFavCount">0</span>
+            </div>
+            <div class="account-stat">
+                <span class="account-stat-label">Discoveries Made</span>
+                <span class="account-stat-value" id="accountDiscoveries">0</span>
+            </div>
+            <div class="account-stat">
+                <span class="account-stat-label">Sites Explored</span>
+                <span class="account-stat-value" id="accountExplored">0</span>
+            </div>
+            <div class="account-stat">
+                <span class="account-stat-label">Member Since</span>
+                <span class="account-stat-value" id="memberSince">Today</span>
+            </div>
+        </div>
+        
+        <div class="account-section">
+            <div class="account-section-title">⚙️ Account Actions</div>
+            <button class="logout-btn" onclick="handleLogout()">🚪 Logout</button>
+        </div>
+    </div>
+    
+    <!-- Map Controls -->
+    <div class="map-controls">
+        <button class="map-control-btn" onclick="toggleMapType()" title="Toggle Satellite/Map">🛰️</button>
+        <button class="map-control-btn active" id="labelsBtn" onclick="toggleLabels()" title="Toggle Labels">🏷️</button>
+        <button class="map-control-btn" id="3dBtn" onclick="toggle3D()" title="Toggle 3D Terrain">🏔️</button>
+        <button class="map-control-btn" onclick="clearAllDrawings()" title="Clear All Drawings">🗑️</button>
+    </div>
+    
+    <!-- Context Menu -->
+    <div class="context-menu" id="contextMenu">
+        <div class="coords-display" id="contextCoords" onclick="copyCoordinates()" title="Click to copy">
+            Loading coordinates...
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" onclick="addCustomMarker()">
+            📍 Add Custom Marker
+        </div>
+        <div class="context-menu-item" onclick="startMeasurement('distance')">
+            📏 Measure Distance
+        </div>
+        <div class="context-menu-item" onclick="startMeasurement('area')">
+            ▭ Calculate Area
+        </div>
+        <div class="context-menu-item" onclick="startMeasurement('bearing')">
+            🧭 Calculate Bearing
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" onclick="findAntipodeFromContext()">
+            🌍 Find Antipode
+        </div>
+        <div class="context-menu-item" onclick="detectGeometryAt()">
+            ✨ Detect Sacred Geometry
+        </div>
+        <div class="context-menu-item" onclick="checkAstronomicalAlignment()">
+            ⭐ Check Astronomical Alignment
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" onclick="startDrawing('line')">
+            📐 Draw Line
+        </div>
+        <div class="context-menu-item" onclick="startDrawing('circle')">
+            ⭕ Draw Circle
+        </div>
+        <div class="context-menu-item" onclick="startDrawing('polygon')">
+            ▱ Draw Polygon
+        </div>
+    </div>
+    
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay" onclick="if(event.target === this) closeModal()">
+        <div class="modal-content">
+            <div class="modal-icon" id="modalIcon">ℹ️</div>
+            <div class="modal-title" id="modalTitle">Information</div>
+            <div class="modal-message" id="modalMessage">This is a message</div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-primary" id="modalPrimaryBtn">OK</button>
+                <button class="modal-btn modal-btn-secondary" id="modalSecondaryBtn" style="display:none;">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ==================================================================
+        // CONFIGURATION & INITIALIZATION
+        // ==================================================================
+        
+        const CONFIG = {
+            // Google Maps API Key
+            GOOGLE_MAPS_API_KEY: 'AIzaSyB16lIKUClrBSHvAJZLq584GG4vZUaa3HQ',
+            
+            // Data URLs from Shopify CDN
+            PYRAMIDS_DATA_URL: 'https://cdn.shopify.com/s/files/1/0853/8701/8573/files/pyramids_data.json?v=1762027215',
+            MEGALITHS_STANDING_STONES_URL: 'https://cdn.shopify.com/s/files/1/0853/8701/8573/files/megalithic_sites_standing_stones_and_circles.json?v=1762347327',
+            MEGALITHS_BURIALS_URL: 'https://cdn.shopify.com/s/files/1/0853/8701/8573/files/megalithic_sites_burials_and_tombs.json?v=1762348072',
+            MEGALITHS_ROCK_ART_URL: 'https://cdn.shopify.com/s/files/1/0853/8701/8573/files/megalithic_sites_rock_art_and_carvings.json?v=1762347285',
+            MEGALITHS_SETTLEMENTS_URL: 'https://cdn.shopify.com/s/files/1/0853/8701/8573/files/megalithic_sites_settlements_and_other.json?v=1762347305',
+            
+            // Supabase Configuration (User will need to add their own credentials)
+            SUPABASE_URL: 'https://hrfmssliipurbyxivanc.supabase.co', // e.g., 'https://xxxxx.supabase.co'
+            SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhyZm1zc2xpaXB1cmJ5eGl2YW5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0MzgxNTIsImV4cCI6MjA3ODAxNDE1Mn0.DB9vrjGYYtkCgnSm25sn1y_7Yr3YJTkuayWlp1_s4io', // Public anon key from Supabase project settings
+            
+            // Map Settings
+            DEFAULT_CENTER: { lat: 29.9792, lng: 31.1342 }, // Great Pyramid of Giza
+            DEFAULT_ZOOM: 3,
+            
+            // Feature Flags
+            ENABLE_SUPABASE: true, // Set to true once Supabase is configured
+            ENABLE_COMMUNITY_SUBMISSIONS: true,
+            ENABLE_FAVORITES_SYNC: true,
+            
+            // Performance Settings
+            MARKER_BATCH_SIZE: 100,
+            CLUSTER_RADIUS: 120
+        };
+        
+        // Global Variables
+        let map, infoWindow, geocoder, markerCluster;
+        let markers = [];
+        let drawings = [];
+        let favorites = [];
+        let currentUser = null;
+        let contextMenuLatLng = null;
+        let measurementMode = null;
+        let measurementPoints = [];
+        let measurementPolyline = null;
+        let currentMapType = 'roadmap';
+        let labelsEnabled = true;
+        let terrain3D = false;
+        
+        // Data Storage
+        let pyramidData = [];
+        let megalithData = {
+            'standing-stones': [],
+            'burials': [],
+            'rock-art': [],
+            'settlements': []
+        };
+        let megalithsLoaded = {
+            'standing-stones': false,
+            'burials': false,
+            'rock-art': false,
+            'settlements': false
+        };
+        
+        // Sacred Geometry Overlays
+        let geometryOverlays = [];
+        
+        // ==================================================================
+        // AUTHENTICATION & USER MANAGEMENT
+        // ==================================================================
+        
+        function checkRegistration() {
+            const stored = localStorage.getItem('pyramason_user');
+            if (stored) {
+                currentUser = JSON.parse(stored);
+                document.getElementById('registrationModal').style.display = 'none';
+                updateUserInterface();
+            }
+        }
+        
+        function handleRegistration(event) {
+            event.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            
+            currentUser = {
+                id: generateUUID(),
+                name,
+                email,
+                registered: new Date().toISOString(),
+                guest: false,
+                profilePicture: null,
+                stats: {
+                    discoveries: 0,
+                    explored: 0,
+                    favorites: 0
+                }
+            };
+            
+            localStorage.setItem('pyramason_user', JSON.stringify(currentUser));
+            document.getElementById('registrationModal').style.display = 'none';
+            
+            updateUserInterface();
+            
+            // Sync to Supabase if enabled
+            if (CONFIG.ENABLE_SUPABASE) {
+                syncUserToSupabase(currentUser);
+            }
+            
+            showModal('🎉', `Welcome, ${name}!`, 
+                'You now have full access to all research tools including:<br><br>' +
+                '• Sacred geometry analysis<br>' +
+                '• Astronomical alignment detection<br>' +
+                '• Advanced measurements<br>' +
+                '• Unlimited favorites<br>' +
+                '• Academic citations<br>' +
+                '• Data export tools<br><br>' +
+                'Happy exploring the ancient mysteries!');
+        }
+        
+        function continueAsGuest() {
+            currentUser = {
+                id: 'guest-' + Date.now(),
+                name: 'Guest Explorer',
+                email: 'guest@pyramason.com',
+                guest: true,
+                entered: new Date().toISOString(),
+                stats: {
+                    discoveries: 0,
+                    explored: 0,
+                    favorites: 0
+                }
+            };
+            
+            localStorage.setItem('pyramason_user', JSON.stringify(currentUser));
+            document.getElementById('registrationModal').style.display = 'none';
+            
+            updateUserInterface();
+        }
+        
+        function updateUserInterface() {
+            if (currentUser) {
+                document.getElementById('accountName').textContent = currentUser.name;
+                document.getElementById('accountEmail').textContent = currentUser.email;
+                
+                if (currentUser.profilePicture) {
+                    document.getElementById('userAvatar').innerHTML = `<img src="${currentUser.profilePicture}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+                    document.getElementById('profilePicture').innerHTML = `<img src="${currentUser.profilePicture}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+                }
+                
+                if (currentUser.registered) {
+                    const date = new Date(currentUser.registered);
+                    document.getElementById('memberSince').textContent = date.toLocaleDateString();
+                }
+                
+                // Update stats
+                document.getElementById('accountFavCount').textContent = favorites.length;
+                if (currentUser.stats) {
+                    document.getElementById('accountDiscoveries').textContent = currentUser.stats.discoveries || 0;
+                    document.getElementById('accountExplored').textContent = currentUser.stats.explored || 0;
+                }
+            }
+        }
+        
+        function toggleAccountPanel() {
+            document.getElementById('accountPanel').classList.toggle('active');
+            if (document.getElementById('toolsPanel').classList.contains('active')) {
+                document.getElementById('toolsPanel').classList.remove('active');
+            }
+        }
+        
+        function toggleToolsPanel() {
+            document.getElementById('toolsPanel').classList.toggle('active');
+            if (document.getElementById('accountPanel').classList.contains('active')) {
+                document.getElementById('accountPanel').classList.remove('active');
+            }
+        }
+        
+        function uploadProfilePicture() {
+            document.getElementById('profilePictureInput').click();
+        }
+        
+        function handleProfilePictureUpload(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const imageData = e.target.result;
+                    currentUser.profilePicture = imageData;
+                    localStorage.setItem('pyramason_user', JSON.stringify(currentUser));
+                    updateUserInterface();
+                    
+                    if (CONFIG.ENABLE_SUPABASE) {
+                        syncUserToSupabase(currentUser);
+                    }
+                    
+                    showModal('✅', 'Success!', 'Profile picture updated successfully!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function handleLogout() {
+            showModal('👋', 'Logout', 'Are you sure you want to logout?', 'Logout', 'Cancel', () => {
+                localStorage.removeItem('pyramason_user');
+                location.reload();
+            });
+        }
+        
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+        
+        // ==================================================================
+        // SUPABASE INTEGRATION
+        // ==================================================================
+        
+        async function syncUserToSupabase(user) {
+            if (!CONFIG.ENABLE_SUPABASE) return;
+            
+            try {
+                const response = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': CONFIG.SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`,
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify({
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        profile_picture: user.profilePicture,
+                        is_guest: user.guest || false,
+                        stats: user.stats || {}
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('✅ User synced to Supabase');
+                }
+            } catch (error) {
+                console.error('Error syncing user to Supabase:', error);
+            }
+        }
+        
+        async function syncFavoritesToSupabase() {
+            if (!CONFIG.ENABLE_SUPABASE || !CONFIG.ENABLE_FAVORITES_SYNC || !currentUser || currentUser.guest) return;
+            
+            try {
+                // Save favorites to Supabase
+                for (const fav of favorites) {
+                    await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/saved_places`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': CONFIG.SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`,
+                            'Prefer': 'return=representation'
+                        },
+                        body: JSON.stringify({
+                            user_id: currentUser.id,
+                            site_name: fav.name,
+                            site_type: fav.mainType,
+                            latitude: fav.lat,
+                            longitude: fav.lng,
+                            notes: fav.notes || ''
+                        })
+                    });
+                }
+                console.log('✅ Favorites synced to Supabase');
+            } catch (error) {
+                console.error('Error syncing favorites:', error);
+            }
+        }
+        
+        async function loadFavoritesFromSupabase() {
+            if (!CONFIG.ENABLE_SUPABASE || !CONFIG.ENABLE_FAVORITES_SYNC || !currentUser || currentUser.guest) return;
+            
+            try {
+                const response = await fetch(
+                    `${CONFIG.SUPABASE_URL}/rest/v1/saved_places?user_id=eq.${currentUser.id}`,
+                    {
+                        headers: {
+                            'apikey': CONFIG.SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`
+                        }
+                    }
+                );
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    // Merge with local favorites
+                    data.forEach(fav => {
+                        if (!favorites.find(f => f.name === fav.site_name)) {
+                            favorites.push({
+                                name: fav.site_name,
+                                mainType: fav.site_type,
+                                lat: fav.latitude,
+                                lng: fav.longitude,
+                                notes: fav.notes
+                            });
+                        }
+                    });
+                    saveFavorites();
+                    console.log('✅ Favorites loaded from Supabase');
+                }
+            } catch (error) {
+                console.error('Error loading favorites from Supabase:', error);
+            }
+        }
+        
+        // ==================================================================
+        // MAP INITIALIZATION
+        // ==================================================================
+        
+        window.initMap = async function() {
+            try {
+                document.getElementById('loadingProgress').textContent = 'Initializing mystical map...';
+                
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: CONFIG.DEFAULT_CENTER,
+                    zoom: CONFIG.DEFAULT_ZOOM,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    mapTypeControl: false,
+                    streetViewControl: true,
+                    streetViewControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM },
+                    fullscreenControl: true,
+                    fullscreenControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM },
+                    zoomControl: true,
+                    zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_BOTTOM },
+                    scaleControl: true,
+                    styles: [
+                        {
+                            featureType: 'water',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#0e1626' }]
+                        },
+                        {
+                            featureType: 'landscape',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#1a1a2e' }]
+                        },
+                        {
+                            featureType: 'poi',
+                            elementType: 'labels',
+                            stylers: [{ visibility: 'off' }]
+                        }
+                    ]
+                });
+                
+                infoWindow = new google.maps.InfoWindow();
+                geocoder = new google.maps.Geocoder();
+                
+                // Setup event listeners
+                setupContextMenu();
+                setupMapListeners();
+                
+                // Load user favorites
+                loadFavorites();
+                
+                // Load favorites from Supabase if enabled
+                if (CONFIG.ENABLE_SUPABASE && CONFIG.ENABLE_FAVORITES_SYNC) {
+                    await loadFavoritesFromSupabase();
+                }
+                
+                // Setup search
+                document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') searchSite();
+                });
+                
+                // Load pyramid data
+                document.getElementById('loadingProgress').textContent = 'Loading pyramid database...';
+                await loadPyramids();
+                
+                // Hide loading screen
+                document.getElementById('loadingScreen').style.display = 'none';
+                
+                // Show welcome message for new users
+                if (!localStorage.getItem('pyramason_welcomed')) {
+                    showWelcomeMessage();
+                    localStorage.setItem('pyramason_welcomed', 'true');
+                }
+                
+            } catch (error) {
+                console.error('Map initialization error:', error);
+                document.getElementById('loadingProgress').textContent = 'Error loading map. Please refresh.';
+            }
+        };
+        
+        function setupMapListeners() {
+            // Click listener for measurements
+            map.addListener('click', (e) => {
+                if (measurementMode) {
+                    addMeasurementPoint(e.latLng);
+                }
+            });
+            
+            // Right-click listener for context menu
+            map.addListener('rightclick', (e) => {
+                e.stop();
+                showContextMenu(e);
+            });
+            
+            // Close context menu on any map interaction
+            map.addListener('click', () => {
+                hideContextMenu();
+            });
+            
+            map.addListener('drag', () => {
+                hideContextMenu();
+            });
+        }
+        
+        function showWelcomeMessage() {
+            showModal('🏛️', 'Welcome to Pyramason', 
+                'Welcome to the most comprehensive ancient mysteries research platform!<br><br>' +
+                '<strong>Quick Start Guide:</strong><br><br>' +
+                '• Use the sidebar filters to toggle site types<br>' +
+                '• Right-click anywhere to access tools<br>' +
+                '• Click the tools button for advanced analysis<br>' +
+                '• Search for specific sites using the search bar<br>' +
+                '• Click any marker to see site details<br><br>' +
+                'Explore 50,000+ ancient sites worldwide with research-grade tools!');
+        }
+        
+        // ==================================================================
+        // DATA LOADING
+        // ==================================================================
+        
+        async function loadPyramids() {
+            try {
+                const response = await fetch(CONFIG.PYRAMIDS_DATA_URL);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const raw = await response.json();
+                let data = Array.isArray(raw) ? raw : (raw.pyramids || raw.sites || raw.data || Object.values(raw).find(v => Array.isArray(v)) || []);
+                
+                pyramidData = data.filter(s => s && s.lat != null && s.lng != null);
+                console.log(`✅ Loaded ${pyramidData.length} pyramids`);
+                
+                createPyramidMarkers();
+                updateCounts();
+                
+            } catch (error) {
+                console.error('Error loading pyramids:', error);
+                showModal('⚠️', 'Error', 'Failed to load pyramid data. Please refresh the page.');
+            }
+        }
+        
+        async function loadMegaliths(category) {
+            if (megalithsLoaded[category]) {
+                applyFilters();
+                return;
+            }
+            
+            try {
+                document.getElementById('loadingScreen').style.display = 'flex';
+                document.getElementById('loadingProgress').textContent = `Loading ${category.replace('-', ' ')}...`;
+                
+                const urls = {
+                    'standing-stones': CONFIG.MEGALITHS_STANDING_STONES_URL,
+                    'burials': CONFIG.MEGALITHS_BURIALS_URL,
+                    'rock-art': CONFIG.MEGALITHS_ROCK_ART_URL,
+                    'settlements': CONFIG.MEGALITHS_SETTLEMENTS_URL
+                };
+                
+                const response = await fetch(urls[category]);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const raw = await response.json();
+                let data = (raw.sites && Array.isArray(raw.sites)) ? raw.sites : (Array.isArray(raw) ? raw : []);
+                
+                megalithData[category] = data.filter(s => s && s.lat != null && s.lng != null);
+                console.log(`✅ Loaded ${megalithData[category].length} ${category}`);
+                
+                createMegalithMarkers(category);
+                megalithsLoaded[category] = true;
+                updateCounts();
+                applyFilters();
+                
+                document.getElementById('loadingScreen').style.display = 'none';
+                
+            } catch (error) {
+                console.error(`Error loading ${category}:`, error);
+                showModal('⚠️', 'Error', `Failed to load ${category.replace('-', ' ')}. Please try again.`);
+                document.getElementById(`layer-${category}`).checked = false;
+                document.getElementById('loadingScreen').style.display = 'none';
+            }
+        }
+        
+        // ==================================================================
+        // MARKER CREATION
+        // ==================================================================
+        
+        function createPyramidMarkers() {
+            pyramidData.forEach(site => {
+                try {
+                    const lat = parseFloat(site.lat);
+                    const lng = parseFloat(site.lng);
+                    if (isNaN(lat) || isNaN(lng)) return;
+                    
+                    const marker = new google.maps.Marker({
+                        position: { lat, lng },
+                        map,
+                        title: site.name || 'Unknown Pyramid',
+                        icon: {
+                            path: 'M 0,-12 L 9,12 L -9,12 Z',
+                            fillColor: '#4FC3F7',
+                            fillOpacity: 0.9,
+                            strokeColor: '#fff',
+                            strokeWeight: 2,
+                            scale: 1.3,
+                            anchor: new google.maps.Point(0, 6)
+                        }
+                    });
+                    
+                    marker.siteData = { ...site, mainType: 'pyramid' };
+                    marker.addListener('click', () => showSiteInfo(marker));
+                    markers.push(marker);
+                    
+                } catch (error) {
+                    console.error('Error creating pyramid marker:', error);
+                }
+            });
+            
+            initCluster();
+        }
+        
+        function createMegalithMarkers(category) {
+            const colors = {
+                'standing-stones': '#BA68C8',
+                'burials': '#9C27B0',
+                'rock-art': '#E91E63',
+                'settlements': '#673AB7'
+            };
+            
+            megalithData[category].forEach(site => {
+                try {
+                    const lat = parseFloat(site.lat);
+                    const lng = parseFloat(site.lng);
+                    if (isNaN(lat) || isNaN(lng)) return;
+                    
+                    const marker = new google.maps.Marker({
+                        position: { lat, lng },
+                        map: null,
+                        title: site.name || 'Unknown Site',
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 6,
+                            fillColor: colors[category],
+                            fillOpacity: 0.9,
+                            strokeColor: '#fff',
+                            strokeWeight: 2
+                        }
+                    });
+                    
+                    marker.siteData = { ...site, mainType: 'megalith', megalithCategory: category };
+                    marker.addListener('click', () => showSiteInfo(marker));
+                    markers.push(marker);
+                    
+                } catch (error) {
+                    console.error('Error creating megalith marker:', error);
+                }
+            });
+            
+            initCluster();
+        }
+        
+        function initCluster() {
+            if (markerCluster) markerCluster.clearMarkers();
+            
+            const visibleMarkers = markers.filter(m => m.getMap() !== null);
+            
+            if (typeof markerClusterer !== 'undefined') {
+                markerCluster = new markerClusterer.MarkerClusterer({
+                    map,
+                    markers: visibleMarkers,
+                    algorithm: new markerClusterer.SuperClusterAlgorithm({ radius: CONFIG.CLUSTER_RADIUS }),
+                    renderer: {
+                        render: ({ count, position }) => new google.maps.Marker({
+                            position,
+                            icon: {
+                                url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60">
+                                        <defs>
+                                            <radialGradient id="grad" cx="50%" cy="50%" r="50%">
+                                                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.9" />
+                                                <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:1" />
+                                            </radialGradient>
+                                        </defs>
+                                        <circle cx="30" cy="30" r="25" fill="url(#grad)" opacity="0.8"/>
+                                        <circle cx="30" cy="30" r="20" fill="url(#grad)"/>
+                                        <text x="30" y="36" font-size="14" fill="white" font-weight="bold" text-anchor="middle">${count}</text>
+                                    </svg>
+                                `)}`,
+                                scaledSize: new google.maps.Size(60, 60)
+                            },
+                            zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count
+                        })
+                    }
+                });
+            }
+        }
+        
+        // ==================================================================
+        // SITE INFORMATION
+        // ==================================================================
+        
+        function showSiteInfo(marker) {
+            const site = marker.siteData;
+            const isFav = isFavorite(site);
+            
+            // Increment explored count
+            if (currentUser && currentUser.stats) {
+                currentUser.stats.explored = (currentUser.stats.explored || 0) + 1;
+                localStorage.setItem('pyramason_user', JSON.stringify(currentUser));
+                updateUserInterface();
+            }
+            
+            let content = `<div class="custom-info">
+                <div class="info-title">${site.name || 'Unknown Site'}</div>`;
+            
+            if (site.description) {
+                const desc = String(site.description).replace(/<[^>]*>/g, '').substring(0, 200);
+                content += `<div class="info-detail">${desc}${desc.length >= 200 ? '...' : ''}</div>`;
+            }
+            
+            content += `<div class="info-detail"><strong>📍 Coordinates:</strong> ${parseFloat(site.lat).toFixed(5)}, ${parseFloat(site.lng).toFixed(5)}</div>`;
+            
+            if (site.country) {
+                content += `<div class="info-detail"><strong>🌍 Location:</strong> ${site.country}</div>`;
+            }
+            
+            if (site.site_type) {
+                content += `<div class="info-detail"><strong>🏛️ Type:</strong> ${site.site_type.replace(/_/g, ' ')}</div>`;
+            }
+            
+            if (site.period) {
+                content += `<div class="info-detail"><strong>📅 Period:</strong> ${site.period}</div>`;
+            }
+            
+            content += `<div class="info-actions">`;
+            content += `<button class="info-btn" onclick="toggleFavorite(${JSON.stringify(site).replace(/"/g, '&quot;')})">${isFav ? '⭐ Saved' : '☆ Save'}</button>`;
+            content += `<button class="info-btn" onclick="analyzeSiteGeometry(${JSON.stringify(site).replace(/"/g, '&quot;')})">✨ Analyze</button>`;
+            content += `</div>`;
+            
+            content += `</div>`;
+            
+            infoWindow.setContent(content);
+            infoWindow.open(map, marker);
+        }
+        
+        // ==================================================================
+        // FAVORITES MANAGEMENT
+        // ==================================================================
+        
+        function loadFavorites() {
+            const stored = localStorage.getItem('pyramason_favorites');
+            if (stored) {
+                favorites = JSON.parse(stored);
+            }
+            updateUserInterface();
+        }
+        
+        function saveFavorites() {
+            localStorage.setItem('pyramason_favorites', JSON.stringify(favorites));
+            updateUserInterface();
+            
+            if (CONFIG.ENABLE_SUPABASE && CONFIG.ENABLE_FAVORITES_SYNC) {
+                syncFavoritesToSupabase();
+            }
+        }
+        
+        function isFavorite(site) {
+            return favorites.some(f => f.name === site.name && f.lat === site.lat && f.lng === site.lng);
+        }
+        
+        function toggleFavorite(site) {
+            const index = favorites.findIndex(f => f.name === site.name && f.lat === site.lat && f.lng === site.lng);
+            
+            if (index >= 0) {
+                favorites.splice(index, 1);
+                showModal('ℹ️', 'Removed', `${site.name} removed from favorites`);
+            } else {
+                favorites.push(site);
+                showModal('⭐', 'Saved!', `${site.name} added to favorites`);
+                
+                // Increment discoveries count
+                if (currentUser && currentUser.stats) {
+                    currentUser.stats.discoveries = (currentUser.stats.discoveries || 0) + 1;
+                    localStorage.setItem('pyramason_user', JSON.stringify(currentUser));
+                }
+            }
+            
+            saveFavorites();
+            
+            // Refresh info window to update button
+            infoWindow.close();
+        }
+        
+        // ==================================================================
+        // FILTERS & SEARCH
+        // ==================================================================
+        
+        function applyFilters() {
+            const pyramidsChecked = document.getElementById('layer-pyramids').checked;
+            const standingStonesChecked = document.getElementById('layer-standing-stones').checked;
+            const burialsChecked = document.getElementById('layer-burials').checked;
+            const rockArtChecked = document.getElementById('layer-rock-art').checked;
+            const settlementsChecked = document.getElementById('layer-settlements').checked;
+            
+            markers.forEach(marker => {
+                const site = marker.siteData;
+                let show = false;
+                
+                if (site.mainType === 'pyramid' && pyramidsChecked) {
+                    show = true;
+                } else if (site.mainType === 'megalith') {
+                    if (site.megalithCategory === 'standing-stones' && standingStonesChecked) show = true;
+                    if (site.megalithCategory === 'burials' && burialsChecked) show = true;
+                    if (site.megalithCategory === 'rock-art' && rockArtChecked) show = true;
+                    if (site.megalithCategory === 'settlements' && settlementsChecked) show = true;
+                }
+                
+                marker.setMap(show ? map : null);
+            });
+            
+            initCluster();
+        }
+        
+        function toggleMegaliths(category) {
+            if (!megalithsLoaded[category]) {
+                loadMegaliths(category);
+            } else {
+                applyFilters();
+            }
+        }
+        
+        function updateCounts() {
+            document.getElementById('count-pyramids').textContent = `(${pyramidData.length})`;
+            document.getElementById('count-standing-stones').textContent = `(${megalithData['standing-stones'].length})`;
+            document.getElementById('count-burials').textContent = `(${megalithData['burials'].length})`;
+            document.getElementById('count-rock-art').textContent = `(${megalithData['rock-art'].length})`;
+            document.getElementById('count-settlements').textContent = `(${megalithData['settlements'].length})`;
+        }
+        
+        function searchSite() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (!query) {
+                showModal('ℹ️', 'Search', 'Please enter a site name to search');
+                return;
+            }
+            
+            let found = null;
+            
+            // Search pyramids
+            found = pyramidData.find(s => s.name && s.name.toLowerCase().includes(query));
+            
+            // Search megaliths if not found
+            if (!found) {
+                for (const category in megalithData) {
+                    found = megalithData[category].find(s => s.name && s.name.toLowerCase().includes(query));
+                    if (found) break;
+                }
+            }
+            
+            if (found) {
+                map.setCenter({ lat: parseFloat(found.lat), lng: parseFloat(found.lng) });
+                map.setZoom(12);
+                
+                // Find and click the marker
+                const marker = markers.find(m => m.siteData.name === found.name);
+                if (marker) {
+                    showSiteInfo(marker);
+                }
+            } else {
+                showModal('🔍', 'Not Found', `No sites found matching "${query}"`);
+            }
+        }
+        
+        // ==================================================================
+        // CONTEXT MENU
+        // ==================================================================
+        
+        function setupContextMenu() {
+            // Hide context menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#contextMenu') && !e.target.closest('.context-menu-item')) {
+                    hideContextMenu();
+                }
+            });
+        }
+        
+        function showContextMenu(e) {
+            contextMenuLatLng = e.latLng;
+            const menu = document.getElementById('contextMenu');
+            const coordsDisplay = document.getElementById('contextCoords');
+            
+            // Update coordinates display
+            const lat = e.latLng.lat().toFixed(6);
+            const lng = e.latLng.lng().toFixed(6);
+            coordsDisplay.innerHTML = `📍 ${lat}, ${lng}<br><small style="opacity:0.7;">Click to copy</small>`;
+            
+            // Position menu at cursor
+            menu.style.left = e.domEvent.pageX + 'px';
+            menu.style.top = e.domEvent.pageY + 'px';
+            menu.classList.add('active');
+        }
+        
+        function hideContextMenu() {
+            document.getElementById('contextMenu').classList.remove('active');
+        }
+        
+        function copyCoordinates() {
+            if (!contextMenuLatLng) return;
+            
+            const lat = contextMenuLatLng.lat().toFixed(6);
+            const lng = contextMenuLatLng.lng().toFixed(6);
+            const text = `${lat}, ${lng}`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showModal('✅', 'Copied!', `Coordinates copied to clipboard:<br>${text}`);
+                hideContextMenu();
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+        
+        function addCustomMarker() {
+            if (!contextMenuLatLng) return;
+            
+            const lat = contextMenuLatLng.lat();
+            const lng = contextMenuLatLng.lng();
+            
+            showModal('📍', 'Add Custom Marker', 
+                `Enter a name for this location:<br><br>` +
+                `<input type="text" id="customMarkerName" style="width:100%;padding:8px;margin-top:10px;border:2px solid #FFD700;background:rgba(0,0,0,0.3);color:#fff;border-radius:6px;" placeholder="Site name">`,
+                'Add Marker', 'Cancel',
+                () => {
+                    const name = document.getElementById('customMarkerName').value.trim();
+                    if (name) {
+                        const marker = new google.maps.Marker({
+                            position: { lat, lng },
+                            map,
+                            title: name,
+                            icon: {
+                                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                                scale: 5,
+                                fillColor: '#FFD700',
+                                fillOpacity: 1,
+                                strokeColor: '#fff',
+                                strokeWeight: 2,
+                                rotation: 180
+                            }
+                        });
+                        
+                        marker.siteData = {
+                            name,
+                            lat,
+                            lng,
+                            mainType: 'custom',
+                            description: 'Custom marker added by user'
+                        };
+                        
+                        marker.addListener('click', () => showSiteInfo(marker));
+                        markers.push(marker);
+                        
+                        showModal('✅', 'Success', `Custom marker "${name}" added!`);
+                    }
+                }
+            );
+            
+            hideContextMenu();
+        }
+        
+        function findAntipodeFromContext() {
+            if (!contextMenuLatLng) return;
+            findAntipode(contextMenuLatLng);
+            hideContextMenu();
+        }
+        
+        function detectGeometryAt() {
+            if (!contextMenuLatLng) return;
+            analyzeSiteGeometry({ lat: contextMenuLatLng.lat(), lng: contextMenuLatLng.lng(), name: 'Selected Location' });
+            hideContextMenu();
+        }
+        
+        function checkAstronomicalAlignment() {
+            if (!contextMenuLatLng) return;
+            analyzeAstronomy('solstice', { lat: contextMenuLatLng.lat(), lng: contextMenuLatLng.lng(), name: 'Selected Location' });
+            hideContextMenu();
+        }
+        
+        // ==================================================================
+        // MEASUREMENT TOOLS
+        // ==================================================================
+        
+        function startMeasurement(type) {
+            measurementMode = type;
+            measurementPoints = [];
+            
+            if (measurementPolyline) {
+                measurementPolyline.setMap(null);
+                measurementPolyline = null;
+            }
+            
+            showModal('📏', `${type.charAt(0).toUpperCase() + type.slice(1)} Measurement`, 
+                `Click points on the map to measure ${type}.<br>` +
+                `${type === 'distance' || type === 'bearing' ? 'Click two points.' : 'Click multiple points and double-click to finish.'}`,
+                'Got it');
+            
+            hideContextMenu();
+        }
+        
+        function addMeasurementPoint(latLng) {
+            if (!measurementMode) return;
+            
+            measurementPoints.push(latLng);
+            
+            // Create or update polyline
+            if (measurementPolyline) {
+                measurementPolyline.setPath(measurementPoints);
+            } else {
+                measurementPolyline = new google.maps.Polyline({
+                    path: measurementPoints,
+                    strokeColor: '#FFD700',
+                    strokeWeight: 3,
+                    strokeOpacity: 0.8,
+                    map
+                });
+            }
+            
+            // Calculate based on mode
+            if (measurementMode === 'distance' && measurementPoints.length === 2) {
+                calculateDistance();
+            } else if (measurementMode === 'bearing' && measurementPoints.length === 2) {
+                calculateBearing();
+            } else if (measurementMode === 'area' && measurementPoints.length >= 3) {
+                // Continue adding points until user double-clicks or clicks close
+            }
+        }
+        
+        function calculateDistance() {
+            if (measurementPoints.length < 2) return;
+            
+            const p1 = measurementPoints[0];
+            const p2 = measurementPoints[1];
+            
+            const distance = google.maps.geometry.spherical.computeDistanceBetween(p1, p2);
+            const distanceKm = (distance / 1000).toFixed(2);
+            const distanceMiles = (distance / 1609.34).toFixed(2);
+            
+            showModal('📏', 'Distance Measurement', 
+                `<strong>Distance between points:</strong><br><br>` +
+                `🌍 ${distanceKm} kilometers<br>` +
+                `📍 ${distanceMiles} miles<br>` +
+                `📐 ${distance.toFixed(0)} meters`);
+            
+            measurementMode = null;
+        }
+        
+        function calculateBearing() {
+            if (measurementPoints.length < 2) return;
+            
+            const p1 = measurementPoints[0];
+            const p2 = measurementPoints[1];
+            
+            const heading = google.maps.geometry.spherical.computeHeading(p1, p2);
+            const bearing = heading < 0 ? heading + 360 : heading;
+            
+            const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+            const index = Math.round(bearing / 45) % 8;
+            const direction = directions[index];
+            
+            showModal('🧭', 'Bearing/Azimuth', 
+                `<strong>Bearing from point 1 to point 2:</strong><br><br>` +
+                `🧭 ${bearing.toFixed(2)}° (${direction})<br><br>` +
+                `<small>0° = North, 90° = East, 180° = South, 270° = West</small>`);
+            
+            measurementMode = null;
+        }
+        
+        function calculateArea() {
+            if (measurementPoints.length < 3) {
+                showModal('ℹ️', 'Area Measurement', 'Need at least 3 points to calculate area');
+                return;
+            }
+            
+            const area = google.maps.geometry.spherical.computeArea(measurementPoints);
+            const areaKm2 = (area / 1000000).toFixed(2);
+            const areaMiles2 = (area / 2589988).toFixed(2);
+            
+            showModal('▭', 'Area Measurement', 
+                `<strong>Enclosed area:</strong><br><br>` +
+                `🌍 ${areaKm2} km²<br>` +
+                `📍 ${areaMiles2} mi²<br>` +
+                `📐 ${area.toFixed(0)} m²`);
+            
+            measurementMode = null;
+        }
+        
+        // ==================================================================
+        // SACRED GEOMETRY ANALYSIS
+        // ==================================================================
+        
+        function analyzeSacredGeometry(type) {
+            showModal('✨', 'Sacred Geometry Analysis', 
+                `Analyzing ${type.replace('-', ' ')} patterns...<br><br>` +
+                `This feature will detect:<br>` +
+                `• ${getGeometryDescription(type)}<br>` +
+                `• Geometric relationships between sites<br>` +
+                `• Mathematical constants in site placement<br><br>` +
+                `<small>Select sites or area on map to analyze</small>`,
+                'OK');
+            
+            toggleToolsPanel();
+        }
+        
+        function getGeometryDescription(type) {
+            const descriptions = {
+                'golden-ratio': 'φ (1.618) proportions and relationships',
+                'fibonacci': 'Fibonacci sequences and golden spirals',
+                'vesica-piscis': 'Sacred circles and vesica patterns',
+                'flower-of-life': 'Ancient geometric flower patterns',
+                'platonic-solids': 'Earth grid systems based on 5 solids'
+            };
+            return descriptions[type] || 'Geometric patterns';
+        }
+        
+        function analyzeSiteGeometry(site) {
+            // Find nearby sites within 100km
+            const siteLatLng = new google.maps.LatLng(parseFloat(site.lat), parseFloat(site.lng));
+            const nearby = [];
+            
+            markers.forEach(marker => {
+                if (marker.siteData.name === site.name) return;
+                
+                const markerLatLng = marker.getPosition();
+                const distance = google.maps.geometry.spherical.computeDistanceBetween(siteLatLng, markerLatLng);
+                
+                if (distance <= 100000) { // 100km
+                    nearby.push({
+                        site: marker.siteData,
+                        distance
+                    });
+                }
+            });
+            
+            // Sort by distance
+            nearby.sort((a, b) => a.distance - b.distance);
+            
+            // Analyze patterns
+            let analysis = `<strong>Nearby Sites Analysis:</strong><br><br>`;
+            analysis += `Found ${nearby.length} sites within 100km<br><br>`;
+            
+            if (nearby.length >= 2) {
+                // Check for golden ratio relationships
+                const goldenRatio = 1.618033988749;
+                let goldenPatterns = 0;
+                
+                for (let i = 0; i < Math.min(5, nearby.length - 1); i++) {
+                    const ratio = nearby[i + 1].distance / nearby[i].distance;
+                    if (Math.abs(ratio - goldenRatio) < 0.1) {
+                        goldenPatterns++;
+                    }
+                }
+                
+                if (goldenPatterns > 0) {
+                    analysis += `✨ <strong>Golden Ratio Detected!</strong><br>`;
+                    analysis += `Found ${goldenPatterns} potential φ relationships<br><br>`;
+                }
+                
+                // Check for equilateral triangles
+                if (nearby.length >= 2) {
+                    const d1 = nearby[0].distance;
+                    const d2 = nearby[1].distance;
+                    const p1 = new google.maps.LatLng(nearby[0].site.lat, nearby[0].site.lng);
+                    const p2 = new google.maps.LatLng(nearby[1].site.lat, nearby[1].site.lng);
+                    const d3 = google.maps.geometry.spherical.computeDistanceBetween(p1, p2);
+                    
+                    const tolerance = 0.1;
+                    if (Math.abs(d1 - d2) / d1 < tolerance && Math.abs(d2 - d3) / d2 < tolerance) {
+                        analysis += `📐 <strong>Equilateral Triangle Pattern!</strong><br>`;
+                        analysis += `Sites form nearly perfect triangle<br><br>`;
+                    }
+                }
+                
+                // List closest sites
+                analysis += `<strong>Closest Sites:</strong><br>`;
+                nearby.slice(0, 3).forEach((item, i) => {
+                    analysis += `${i + 1}. ${item.site.name} - ${(item.distance / 1000).toFixed(1)}km<br>`;
+                });
+            }
+            
+            showModal('✨', 'Sacred Geometry Analysis', analysis);
+        }
+        
+        function detectSacredGeometry(type) {
+            const checked = document.getElementById(`sacred-${type}`).checked;
+            
+            if (checked) {
+                showModal('✨', `Detecting ${type}`, 
+                    `Analyzing visible sites for ${type} patterns...<br><br>` +
+                    `This will highlight sites that form geometric patterns.`);
+                
+                // Here you would implement actual geometry detection
+                // For now, show a message
+                setTimeout(() => {
+                    document.getElementById(`sacred-${type}`).checked = false;
+                }, 2000);
+            }
+        }
+        
+        // ==================================================================
+        // ASTRONOMICAL ANALYSIS
+        // ==================================================================
+        
+        function analyzeAstronomy(type, site = null) {
+            let message = '';
+            
+            if (type === 'solstice') {
+                message = `<strong>Solstice Alignment Analysis</strong><br><br>` +
+                    `Checking for sunrise/sunset alignments on:<br>` +
+                    `• Summer Solstice (June 21)<br>` +
+                    `• Winter Solstice (December 21)<br><br>` +
+                    `<small>Many ancient sites align with solstice events</small>`;
+            } else if (type === 'equinox') {
+                message = `<strong>Equinox Alignment Analysis</strong><br><br>` +
+                    `Checking for sunrise/sunset alignments on:<br>` +
+                    `• Spring Equinox (March 20)<br>` +
+                    `• Autumn Equinox (September 22)<br><br>` +
+                    `<small>Equinox alignments indicate astronomical knowledge</small>`;
+            } else if (type === 'stars') {
+                message = `<strong>Star Alignment Analysis</strong><br><br>` +
+                    `Checking alignments with major stars/constellations:<br>` +
+                    `• Orion's Belt<br>` +
+                    `• Sirius (brightest star)<br>` +
+                    `• Pleiades<br>` +
+                    `• Draco<br><br>` +
+                    `<small>Star alignments may indicate ancient astronomical observations</small>`;
+            }
+            
+            showModal('🌟', 'Astronomical Analysis', message);
+            toggleToolsPanel();
+        }
+        
+        // ==================================================================
+        // DRAWING TOOLS
+        // ==================================================================
+        
+        function startDrawing(type) {
+            showModal('✏️', `Draw ${type.charAt(0).toUpperCase() + type.slice(1)}`, 
+                `Click points on the map to draw a ${type}.<br>` +
+                `${type === 'line' ? 'Click two points.' : 'Click multiple points and double-click to finish.'}`,
+                'Got it');
+            
+            measurementMode = type + '-draw';
+            measurementPoints = [];
+            
+            if (measurementPolyline) {
+                measurementPolyline.setMap(null);
+                measurementPolyline = null;
+            }
+            
+            hideContextMenu();
+            toggleToolsPanel();
+        }
+        
+        function clearAllDrawings() {
+            showModal('🗑️', 'Clear All', 'Are you sure you want to clear all drawings and measurements?', 
+                'Clear', 'Cancel', () => {
+                    if (measurementPolyline) {
+                        measurementPolyline.setMap(null);
+                        measurementPolyline = null;
+                    }
+                    
+                    measurementMode = null;
+                    measurementPoints = [];
+                    
+                    // Clear any geometry overlays
+                    geometryOverlays.forEach(overlay => overlay.setMap(null));
+                    geometryOverlays = [];
+                    
+                    showModal('✅', 'Cleared', 'All drawings and measurements cleared');
+                });
+        }
+        
+        // ==================================================================
+        // EXPORT & CITATION TOOLS
+        // ==================================================================
+        
+        function exportData(format) {
+            const visibleSites = [];
+            
+            markers.forEach(marker => {
+                if (marker.getMap() !== null) {
+                    visibleSites.push(marker.siteData);
+                }
+            });
+            
+            if (visibleSites.length === 0) {
+                showModal('ℹ️', 'No Data', 'No sites are currently visible to export. Enable some filters first.');
+                return;
+            }
+            
+            let fileContent = '';
+            let filename = '';
+            let mimeType = '';
+            
+            if (format === 'csv') {
+                fileContent = generateCSV(visibleSites);
+                filename = 'pyramason_sites.csv';
+                mimeType = 'text/csv';
+            } else if (format === 'geojson') {
+                fileContent = generateGeoJSON(visibleSites);
+                filename = 'pyramason_sites.geojson';
+                mimeType = 'application/json';
+            } else if (format === 'kml') {
+                fileContent = generateKML(visibleSites);
+                filename = 'pyramason_sites.kml';
+                mimeType = 'application/vnd.google-earth.kml+xml';
+            }
+            
+            // Create download
+            const blob = new Blob([fileContent], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showModal('✅', 'Export Complete', `Exported ${visibleSites.length} sites to ${format.toUpperCase()}`);
+            toggleToolsPanel();
+        }
+        
+        function generateCSV(sites) {
+            let csv = 'Name,Latitude,Longitude,Type,Country,Description\n';
+            
+            sites.forEach(site => {
+                const name = (site.name || '').replace(/,/g, ';');
+                const desc = (site.description || '').replace(/,/g, ';').replace(/<[^>]*>/g, '').substring(0, 100);
+                csv += `"${name}",${site.lat},${site.lng},"${site.mainType}","${site.country || ''}","${desc}"\n`;
+            });
+            
+            return csv;
+        }
+        
+        function generateGeoJSON(sites) {
+            const features = sites.map(site => ({
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: [parseFloat(site.lng), parseFloat(site.lat)]
+                },
+                properties: {
+                    name: site.name || 'Unknown',
+                    type: site.mainType,
+                    country: site.country || '',
+                    description: (site.description || '').replace(/<[^>]*>/g, '').substring(0, 200)
+                }
+            }));
+            
+            return JSON.stringify({
+                type: 'FeatureCollection',
+                features
+            }, null, 2);
+        }
+        
+        function generateKML(sites) {
+            let kml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+            kml += '<kml xmlns="http://www.opengis.net/kml/2.2">\n';
+            kml += '<Document>\n';
+            kml += '<name>Pyramason Ancient Sites</name>\n';
+            
+            sites.forEach(site => {
+                kml += '<Placemark>\n';
+                kml += `<name>${escapeXml(site.name || 'Unknown')}</name>\n`;
+                kml += `<description>${escapeXml((site.description || '').replace(/<[^>]*>/g, '').substring(0, 200))}</description>\n`;
+                kml += '<Point>\n';
+                kml += `<coordinates>${site.lng},${site.lat},0</coordinates>\n`;
+                kml += '</Point>\n';
+                kml += '</Placemark>\n';
+            });
+            
+            kml += '</Document>\n';
+            kml += '</kml>';
+            
+            return kml;
+        }
+        
+        function escapeXml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&apos;');
+        }
+        
+        function generateCitation() {
+            const currentDate = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            const citations = {
+                apa: `Pyramason Research Platform. (${new Date().getFullYear()}). Ancient Sites Interactive Map. Retrieved ${currentDate}, from https://pyramason.com/ancient-map`,
+                
+                mla: `"Ancient Sites Interactive Map." Pyramason Research Platform, ${new Date().getFullYear()}, pyramason.com/ancient-map. Accessed ${currentDate}.`,
+                
+                chicago: `Pyramason Research Platform. "Ancient Sites Interactive Map." Last modified ${new Date().getFullYear()}. https://pyramason.com/ancient-map.`,
+                
+                harvard: `Pyramason Research Platform (${new Date().getFullYear()}) Ancient Sites Interactive Map. Available at: https://pyramason.com/ancient-map (Accessed: ${currentDate}).`,
+                
+                bibtex: `@misc{pyramason${new Date().getFullYear()},
+  author = {{Pyramason Research Platform}},
+  title = {Ancient Sites Interactive Map},
+  year = {${new Date().getFullYear()}},
+  url = {https://pyramason.com/ancient-map},
+  note = {Accessed: ${currentDate}}
+}`
+            };
+            
+            let content = '<div style="text-align:left;max-height:400px;overflow-y:auto;">';
+            
+            Object.keys(citations).forEach(style => {
+                content += `<div style="margin-bottom:20px;">`;
+                content += `<strong style="color:#FFD700;">${style.toUpperCase()}</strong><br>`;
+                content += `<div style="font-size:12px;font-family:monospace;background:rgba(0,0,0,0.3);padding:10px;margin-top:5px;border-radius:6px;white-space:pre-wrap;">${citations[style]}</div>`;
+                content += `</div>`;
+            });
+            
+            content += '</div>';
+            
+            showModal('📚', 'Academic Citations', content);
+            toggleToolsPanel();
+        }
+        
+        // ==================================================================
+        // ANTIPODE CALCULATOR
+        // ==================================================================
+        
+        function findAntipode(latLng = null) {
+            const sourceLat = latLng ? latLng.lat() : (contextMenuLatLng ? contextMenuLatLng.lat() : CONFIG.DEFAULT_CENTER.lat);
+            const sourceLng = latLng ? latLng.lng() : (contextMenuLatLng ? contextMenuLatLng.lng() : CONFIG.DEFAULT_CENTER.lng);
+            
+            // Calculate antipode
+            const antipodeLat = -sourceLat;
+            let antipodeLng = sourceLng + 180;
+            if (antipodeLng > 180) antipodeLng -= 360;
+            if (antipodeLng < -180) antipodeLng += 360;
+            
+            // Create marker at antipode
+            const antipodeMarker = new google.maps.Marker({
+                position: { lat: antipodeLat, lng: antipodeLng },
+                map,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 10,
+                    fillColor: '#FF5722',
+                    fillOpacity: 0.9,
+                    strokeColor: '#fff',
+                    strokeWeight: 3
+                },
+                title: 'Antipode Point',
+                animation: google.maps.Animation.DROP
+            });
+            
+            // Draw line through Earth's center
+            const line = new google.maps.Polyline({
+                path: [
+                    { lat: sourceLat, lng: sourceLng },
+                    { lat: antipodeLat, lng: antipodeLng }
+                ],
+                strokeColor: '#FF5722',
+                strokeWeight: 2,
+                strokeOpacity: 0.7,
+                geodesic: true,
+                map
+            });
+            
+            drawings.push(line);
+            markers.push(antipodeMarker);
+            
+            // Pan to show both points
+            const bounds = new google.maps.LatLngBounds();
+            bounds.extend({ lat: sourceLat, lng: sourceLng });
+            bounds.extend({ lat: antipodeLat, lng: antipodeLng });
+            map.fitBounds(bounds);
+            
+            showModal('🌍', 'Antipode Found!', 
+                `<strong>Opposite point on Earth:</strong><br><br>` +
+                `Source: ${sourceLat.toFixed(5)}, ${sourceLng.toFixed(5)}<br>` +
+                `Antipode: ${antipodeLat.toFixed(5)}, ${antipodeLng.toFixed(5)}<br><br>` +
+                `<small>These points are directly opposite through Earth's center</small>`);
+        }
+        
+        // ==================================================================
+        // MAP CONTROLS
+        // ==================================================================
+        
+        function toggleMapType() {
+            if (currentMapType === 'roadmap') {
+                map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+                currentMapType = 'satellite';
+            } else {
+                map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+                currentMapType = 'roadmap';
+            }
+        }
+        
+        function toggleLabels() {
+            labelsEnabled = !labelsEnabled;
+            const labelsBtn = document.getElementById('labelsBtn');
+            
+            if (labelsEnabled) {
+                labelsBtn.classList.add('active');
+                map.setOptions({
+                    styles: [
+                        {
+                            featureType: 'water',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#0e1626' }]
+                        },
+                        {
+                            featureType: 'landscape',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#1a1a2e' }]
+                        }
+                    ]
+                });
+            } else {
+                labelsBtn.classList.remove('active');
+                map.setOptions({
+                    styles: [
+                        {
+                            featureType: 'water',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#0e1626' }]
+                        },
+                        {
+                            featureType: 'landscape',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#1a1a2e' }]
+                        },
+                        {
+                            featureType: 'all',
+                            elementType: 'labels',
+                            stylers: [{ visibility: 'off' }]
+                        }
+                    ]
+                });
+            }
+        }
+        
+        function toggle3D() {
+            terrain3D = !terrain3D;
+            const btn3D = document.getElementById('3dBtn');
+            
+            if (terrain3D) {
+                btn3D.classList.add('active');
+                map.setTilt(45);
+            } else {
+                btn3D.classList.remove('active');
+                map.setTilt(0);
+            }
+        }
+        
+        // ==================================================================
+        // MODAL SYSTEM
+        // ==================================================================
+        
+        function showModal(icon, title, message, primaryBtnText = 'OK', secondaryBtnText = null, onPrimary = null, onSecondary = null) {
+            const overlay = document.getElementById('modalOverlay');
+            const modalIcon = document.getElementById('modalIcon');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const primaryBtn = document.getElementById('modalPrimaryBtn');
+            const secondaryBtn = document.getElementById('modalSecondaryBtn');
+            
+            modalIcon.textContent = icon;
+            modalTitle.textContent = title;
+            modalMessage.innerHTML = message;
+            primaryBtn.textContent = primaryBtnText;
+            
+            if (secondaryBtnText) {
+                secondaryBtn.textContent = secondaryBtnText;
+                secondaryBtn.style.display = 'block';
+                secondaryBtn.onclick = () => {
+                    closeModal();
+                    if (onSecondary) onSecondary();
+                };
+            } else {
+                secondaryBtn.style.display = 'none';
+            }
+            
+            primaryBtn.onclick = () => {
+                closeModal();
+                if (onPrimary) onPrimary();
+            };
+            
+            overlay.classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+        
+        // ==================================================================
+        // INITIALIZATION
+        // ==================================================================
+        
+        // Check if user is already registered
+        checkRegistration();
+        
+        // Load Google Maps API
+        (function() {
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${CONFIG.GOOGLE_MAPS_API_KEY}&callback=initMap&libraries=geometry&v=weekly`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        })();
+        
+        // Load marker clustering library
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js';
+            script.async = true;
+            document.head.appendChild(script);
+        })();
+        
+    </script>
+</body>
+</html>
