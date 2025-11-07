@@ -1,0 +1,3464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyramason - Ultimate Ancient Sites Research Platform</title>
+    <meta name="description" content="Research-grade platform for 50,000+ ancient pyramids, megaliths, temples, and sacred sites worldwide with advanced analysis tools">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary-purple: #6A1B9A;
+            --dark-purple: #4A148C;
+            --light-purple: #9C27B0;
+            --accent-gold: #FFD700;
+            --dark-gold: #D4AF37;
+            --cyan: #00BCD4;
+            --light-cyan: #4FC3F7;
+            --cosmic-bg: #1a0033;
+            --panel-bg: rgba(26, 0, 51, 0.95);
+            --glass-bg: rgba(106, 27, 154, 0.15);
+        }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--cosmic-bg);
+            color: #fff;
+            overflow: hidden;
+        }
+        
+        /* 3D Pyramid Logo SVG */
+        .pyramason-logo {
+            width: 80px;
+            height: 80px;
+            display: inline-block;
+        }
+        
+        .pyramason-logo-small {
+            width: 40px;
+            height: 40px;
+        }
+        
+        /* Registration Modal */
+        .registration-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 50%, #1a0033 100%);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .registration-content {
+            background: var(--panel-bg);
+            border: 3px solid var(--accent-gold);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.3);
+            animation: slideUp 0.6s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .registration-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .registration-title {
+            font-size: 32px;
+            text-align: center;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .registration-subtitle {
+            text-align: center;
+            color: var(--light-cyan);
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .registration-features {
+            margin: 25px 0;
+            padding: 20px;
+            background: var(--glass-bg);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .feature-item::before {
+            content: '✨';
+            font-size: 18px;
+        }
+        
+        .registration-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            color: var(--accent-gold);
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            padding: 12px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .registration-btn {
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            color: var(--dark-purple);
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .registration-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        .guest-btn {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .guest-btn:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            color: #fff;
+        }
+        
+        /* Map Container */
+        #map {
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        /* Collapsible Sidebar - Left Side */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 60px;
+            height: 100vh;
+            background: linear-gradient(180deg, rgba(26, 0, 51, 0.98) 0%, rgba(74, 20, 140, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            border-right: 2px solid rgba(255, 215, 0, 0.3);
+            z-index: 1000;
+            transition: width 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar:hover {
+            width: 280px;
+        }
+        
+        .sidebar-header {
+            padding: 15px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+            text-align: center;
+        }
+        
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .sidebar:hover .sidebar-title {
+            opacity: 1;
+        }
+        
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 12px;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .sidebar:hover .section-title {
+            opacity: 1;
+        }
+        
+        .sidebar-btn {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+        
+        .sidebar-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: var(--accent-gold);
+        }
+        
+        .sidebar-btn.active {
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            color: var(--dark-purple);
+            font-weight: 600;
+        }
+        
+        .btn-icon {
+            font-size: 20px;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .btn-text {
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .sidebar:hover .btn-text {
+            opacity: 1;
+        }
+        
+        /* Search Bar - Centered Top */
+        .search-bar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 900;
+            background: var(--panel-bg);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 2px solid var(--accent-gold);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .search-input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            width: 300px;
+            outline: none;
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .search-btn {
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            color: var(--dark-purple);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .search-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+        
+        /* Map Controls - Top Right */
+        .map-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 900;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            background: var(--panel-bg);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: var(--accent-gold);
+            transform: scale(1.1);
+        }
+        
+        .control-btn.active {
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            color: var(--dark-purple);
+        }
+        
+        /* Timeline Slider - Bottom */
+        .timeline-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            max-width: 800px;
+            z-index: 900;
+            background: var(--panel-bg);
+            padding: 15px 30px;
+            border-radius: 20px;
+            border: 2px solid var(--accent-gold);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-title {
+            color: var(--accent-gold);
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .timeline-value {
+            color: var(--light-cyan);
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .timeline-slider {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .timeline-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .timeline-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .timeline-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Feature Panels - Right Side */
+        .feature-panel {
+            position: fixed;
+            right: -400px;
+            top: 90px;
+            width: 380px;
+            max-height: calc(100vh - 110px);
+            background: var(--panel-bg);
+            border: 2px solid var(--accent-gold);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
+            z-index: 800;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .feature-panel.active {
+            right: 20px;
+        }
+        
+        .panel-header {
+            padding: 15px 20px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .panel-title {
+            color: var(--accent-gold);
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .close-panel {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close-panel:hover {
+            color: var(--accent-gold);
+            transform: rotate(90deg);
+        }
+        
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        /* Right-Click Context Menu */
+        .context-menu {
+            position: fixed;
+            background: var(--panel-bg);
+            border: 2px solid var(--accent-gold);
+            border-radius: 10px;
+            padding: 10px 0;
+            min-width: 200px;
+            z-index: 10000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+        
+        .context-menu-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .context-menu-item:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+        
+        .context-menu-icon {
+            font-size: 16px;
+            width: 20px;
+        }
+        
+        /* Modal System */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--panel-bg);
+            border: 3px solid var(--accent-gold);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .modal-icon {
+            font-size: 40px;
+        }
+        
+        .modal-title {
+            color: var(--accent-gold);
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .modal-body {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .modal-btn {
+            padding: 10px 30px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), var(--dark-gold));
+            color: var(--dark-purple);
+        }
+        
+        .modal-btn-secondary {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+        
+        /* Natal Chart Specific Styles */
+        .natal-chart-wheel {
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            position: relative;
+            border: 3px solid var(--accent-gold);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(26, 0, 51, 0.9) 0%, rgba(74, 20, 140, 0.9) 100%);
+        }
+        
+        .zodiac-sign {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+        
+        .planet-position {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid var(--accent-gold);
+            border-radius: 50%;
+        }
+        
+        .planet-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 3px solid var(--accent-gold);
+        }
+        
+        .planet-name {
+            color: var(--accent-gold);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .planet-details {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Frequency Zone Overlays */
+        .frequency-indicator {
+            position: fixed;
+            bottom: 180px;
+            right: 20px;
+            background: var(--panel-bg);
+            border: 2px solid var(--accent-gold);
+            border-radius: 10px;
+            padding: 15px;
+            z-index: 800;
+            backdrop-filter: blur(10px);
+        }
+        
+        .frequency-title {
+            color: var(--accent-gold);
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .frequency-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .frequency-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Loading Spinner */
+        .loading-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 215, 0, 0.2);
+            border-top: 4px solid var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 10001;
+            display: none;
+        }
+        
+        .loading-spinner.active {
+            display: block;
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--dark-gold);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 50px;
+            }
+            
+            .sidebar:hover {
+                width: 240px;
+            }
+            
+            .search-bar {
+                width: 90%;
+                left: 5%;
+                transform: none;
+            }
+            
+            .search-input {
+                width: 200px;
+            }
+            
+            .timeline-container {
+                width: 90%;
+            }
+            
+            .feature-panel {
+                width: 90%;
+                right: -100%;
+            }
+            
+            .feature-panel.active {
+                right: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Registration Modal -->
+    <div class="registration-modal" id="registrationModal" style="display:none;">
+        <div class="registration-content">
+            <div class="registration-logo">
+                <svg class="pyramason-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="pyramidGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="pyramidPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#9C27B0;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#6A1B9A;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- Front face -->
+                    <polygon points="100,40 40,160 160,160" fill="url(#pyramidGold)" stroke="#4A148C" stroke-width="3"/>
+                    <!-- Left face -->
+                    <polygon points="100,40 40,160 100,140" fill="url(#pyramidPurple)" opacity="0.8" stroke="#4A148C" stroke-width="2"/>
+                    <!-- Right face -->
+                    <polygon points="100,40 160,160 100,140" fill="url(#pyramidPurple)" opacity="0.6" stroke="#4A148C" stroke-width="2"/>
+                    <!-- All-seeing eye -->
+                    <circle cx="100" cy="90" r="20" fill="#FFD700" stroke="#4A148C" stroke-width="2"/>
+                    <circle cx="100" cy="90" r="12" fill="#4A148C"/>
+                    <circle cx="100" cy="90" r="6" fill="#00BCD4"/>
+                </svg>
+            </div>
+            
+            <h1 class="registration-title">PYRAMASON</h1>
+            <p class="registration-subtitle">Ultimate Ancient Mysteries Research Platform</p>
+            
+            <div class="registration-features">
+                <div class="feature-item">50,000+ Ancient Sites Worldwide</div>
+                <div class="feature-item">Advanced Sacred Geometry Tools</div>
+                <div class="feature-item">Live Astronomical Calculations</div>
+                <div class="feature-item">Ley Lines & Energy Grid Detection</div>
+                <div class="feature-item">Community Research & Reviews</div>
+            </div>
+            
+            <form class="registration-form" onsubmit="handleRegistration(event)">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="regEmail" placeholder="your@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="regUsername" placeholder="Choose a username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" placeholder="Create a password" required>
+                </div>
+                
+                <button type="submit" class="registration-btn">Create Account</button>
+                <button type="button" class="guest-btn" onclick="continueAsGuest()">Continue as Guest</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Map Container -->
+    <div id="map"></div>
+    
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner"></div>
+    
+    <!-- Collapsible Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <svg class="pyramason-logo-small" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="100,40 40,160 160,160" fill="url(#pyramidGold)" stroke="#4A148C" stroke-width="3"/>
+                <polygon points="100,40 40,160 100,140" fill="url(#pyramidPurple)" opacity="0.8"/>
+                <polygon points="100,40 160,160 100,140" fill="url(#pyramidPurple)" opacity="0.6"/>
+                <circle cx="100" cy="90" r="20" fill="#FFD700" stroke="#4A148C" stroke-width="2"/>
+                <circle cx="100" cy="90" r="12" fill="#4A148C"/>
+                <circle cx="100" cy="90" r="6" fill="#00BCD4"/>
+            </svg>
+            <div class="sidebar-title">PYRAMASON</div>
+        </div>
+        
+        <div class="sidebar-content">
+            <!-- Site Layers -->
+            <div class="sidebar-section">
+                <div class="section-title">🗺️ Layers</div>
+                <button class="sidebar-btn active" onclick="toggleLayer('pyramids')">
+                    <span class="btn-icon">🔺</span>
+                    <span class="btn-text">Pyramids</span>
+                </button>
+                <button class="sidebar-btn" onclick="toggleLayer('megaliths')">
+                    <span class="btn-icon">🗿</span>
+                    <span class="btn-text">All Megaliths</span>
+                </button>
+                <!-- Megalith Subtypes (indented) -->
+                <button class="sidebar-btn" onclick="toggleLayer('megalithsBurials')" style="padding-left: 25px; font-size: 12px;">
+                    <span class="btn-icon">⬛</span>
+                    <span class="btn-text">Burials & Tombs</span>
+                </button>
+                <button class="sidebar-btn" onclick="toggleLayer('megalithsStones')" style="padding-left: 25px; font-size: 12px;">
+                    <span class="btn-icon">△</span>
+                    <span class="btn-text">Standing Stones</span>
+                </button>
+                <button class="sidebar-btn" onclick="toggleLayer('megalithsRockArt')" style="padding-left: 25px; font-size: 12px;">
+                    <span class="btn-icon">⭕</span>
+                    <span class="btn-text">Rock Art</span>
+                </button>
+                <button class="sidebar-btn" onclick="toggleLayer('megalithsSettlements')" style="padding-left: 25px; font-size: 12px;">
+                    <span class="btn-icon">🏠</span>
+                    <span class="btn-text">Settlements</span>
+                </button>
+            </div>
+            
+            <!-- Analysis Tools -->
+            <div class="sidebar-section">
+                <div class="section-title">🔬 Analysis</div>
+                <button class="sidebar-btn" onclick="togglePanel('geometryPanel')">
+                    <span class="btn-icon">📐</span>
+                    <span class="btn-text">Sacred Geometry</span>
+                </button>
+                <button class="sidebar-btn" onclick="togglePanel('leyLinesPanel')">
+                    <span class="btn-icon">〰️</span>
+                    <span class="btn-text">Ley Lines</span>
+                </button>
+                <button class="sidebar-btn" onclick="togglePanel('natalChartPanel')">
+                    <span class="btn-icon">♈</span>
+                    <span class="btn-text">Natal Chart</span>
+                </button>
+                <button class="sidebar-btn" onclick="togglePanel('astronomyPanel')">
+                    <span class="btn-icon">🌟</span>
+                    <span class="btn-text">Astronomy</span>
+                </button>
+                <button class="sidebar-btn" onclick="togglePanel('frequencyPanel')">
+                    <span class="btn-icon">🎵</span>
+                    <span class="btn-text">Frequencies</span>
+                </button>
+            </div>
+            
+            <!-- Tools -->
+            <div class="sidebar-section">
+                <div class="section-title">🛠️ Tools</div>
+                <button class="sidebar-btn" onclick="togglePanel('timelinePanel')">
+                    <span class="btn-icon">⏱️</span>
+                    <span class="btn-text">Timeline</span>
+                </button>
+                <button class="sidebar-btn" onclick="clearDrawings()">
+                    <span class="btn-icon">🧹</span>
+                    <span class="btn-text">Clear Map</span>
+                </button>
+                <button class="sidebar-btn" onclick="resetView()">
+                    <span class="btn-icon">🔄</span>
+                    <span class="btn-text">Reset View</span>
+                </button>
+            </div>
+            
+            <!-- Discovery -->
+            <div class="sidebar-section">
+                <div class="section-title">🧭 Explore</div>
+                <button class="sidebar-btn" onclick="randomSite()">
+                    <span class="btn-icon">🎲</span>
+                    <span class="btn-text">Random Site</span>
+                </button>
+                <button class="sidebar-btn" onclick="startTour()">
+                    <span class="btn-icon">🚶</span>
+                    <span class="btn-text">Guided Tour</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <span style="font-size: 20px;">🔍</span>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search ancient sites, civilizations, coordinates...">
+        <button class="search-btn" onclick="performSearch()">Search</button>
+    </div>
+    
+    <!-- Map Controls -->
+    <div class="map-controls">
+        <button class="control-btn" id="satelliteBtn" onclick="toggleMapType()" title="Toggle Satellite">🛰️</button>
+        <button class="control-btn" id="labelsBtn" onclick="toggleLabels()" title="Toggle Labels">🏷️</button>
+        <button class="control-btn" id="3dBtn" onclick="toggle3D()" title="Toggle 3D">🏔️</button>
+        <button class="control-btn" id="streetViewBtn" onclick="toggleStreetView()" title="Street View">👁️</button>
+        <button class="control-btn" id="myLocationBtn" onclick="goToMyLocation()" title="My Location">📍</button>
+    </div>
+    
+    <!-- Timeline Slider (moved to panel - hidden by default) -->
+    <div class="timeline-container" style="display: none;">
+        <div class="timeline-header">
+            <div class="timeline-title">⏱️ Historical Timeline</div>
+            <div class="timeline-value" id="timelineValue">All Eras</div>
+        </div>
+        <input type="range" class="timeline-slider" id="timelineSlider" min="-10000" max="2025" value="2025" step="50">
+        <div class="timeline-labels">
+            <span>10,000 BCE</span>
+            <span>5000 BCE</span>
+            <span>0 CE</span>
+            <span>1000 CE</span>
+            <span>Present</span>
+        </div>
+    </div>
+    
+    <!-- Frequency Indicator (Hidden by default) -->
+    <div class="frequency-indicator" id="frequencyIndicator" style="display:none;">
+        <div class="frequency-title">🎵 Active Frequencies</div>
+        <div class="frequency-item">
+            <div class="frequency-dot" style="background: #FFD700;"></div>
+            <span>432 Hz - Healing</span>
+        </div>
+        <div class="frequency-item">
+            <div class="frequency-dot" style="background: #00BCD4;"></div>
+            <span>528 Hz - Love</span>
+        </div>
+    </div>
+    
+    <!-- Right-Click Context Menu -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" onclick="copyCoordinates()">
+            <span class="context-menu-icon">📋</span>
+            <span>Copy Coordinates</span>
+        </div>
+        <div class="context-menu-item" onclick="measureDistance()">
+            <span class="context-menu-icon">📏</span>
+            <span>Measure Distance</span>
+        </div>
+        <div class="context-menu-item" onclick="measureArea()">
+            <span class="context-menu-icon">⬛</span>
+            <span>Measure Area</span>
+        </div>
+        <div class="context-menu-item" onclick="findAntipode()">
+            <span class="context-menu-icon">🌍</span>
+            <span>Find Antipode</span>
+        </div>
+        <div class="context-menu-item" onclick="detectGeometry()">
+            <span class="context-menu-icon">📐</span>
+            <span>Detect Geometry</span>
+        </div>
+        <div class="context-menu-item" onclick="findLeyLines()">
+            <span class="context-menu-icon">〰️</span>
+            <span>Find Ley Lines</span>
+        </div>
+        <div class="context-menu-item" onclick="starAlignment()">
+            <span class="context-menu-icon">⭐</span>
+            <span>Star Alignment</span>
+        </div>
+        <div class="context-menu-item" onclick="addCustomMarker()">
+            <span class="context-menu-icon">📍</span>
+            <span>Add Marker</span>
+        </div>
+        <div class="context-menu-item" onclick="saveThisLocation()">
+            <span class="context-menu-icon">💾</span>
+            <span>Save Location</span>
+        </div>
+    </div>
+    
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-icon" id="modalIcon">✨</div>
+                <div class="modal-title" id="modalTitle">Modal Title</div>
+            </div>
+            <div class="modal-body" id="modalBody">
+                Modal content goes here
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-primary" id="modalPrimaryBtn" onclick="closeModal()">OK</button>
+                <button class="modal-btn modal-btn-secondary" id="modalSecondaryBtn" onclick="closeModal()" style="display:none;">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Feature Panels (Initially Hidden) -->
+    <!-- Sacred Geometry Panel -->
+    <div class="feature-panel" id="geometryPanel">
+        <div class="panel-header">
+            <div class="panel-title">📐 Sacred Geometry</div>
+            <button class="close-panel" onclick="closePanel('geometryPanel')">✕</button>
+        </div>
+        <div class="panel-content">
+            <h4 style="color: var(--accent-gold); margin-bottom: 15px;">Detection Tools</h4>
+            <button class="sidebar-btn" onclick="detectGoldenRatio()">
+                <span class="btn-icon">φ</span>
+                <span class="btn-text">Golden Ratio (1.618)</span>
+            </button>
+            <button class="sidebar-btn" onclick="detectFibonacci()">
+                <span class="btn-icon">🌀</span>
+                <span class="btn-text">Fibonacci Spiral</span>
+            </button>
+            <button class="sidebar-btn" onclick="detectEquilateral()">
+                <span class="btn-icon">△</span>
+                <span class="btn-text">Equilateral Triangles</span>
+            </button>
+            <button class="sidebar-btn" onclick="detectPythagorean()">
+                <span class="btn-icon">∟</span>
+                <span class="btn-text">Pythagorean Triangles</span>
+            </button>
+            <button class="sidebar-btn" onclick="detectCircular()">
+                <span class="btn-icon">⭕</span>
+                <span class="btn-text">Circular Formations</span>
+            </button>
+            <button class="sidebar-btn" onclick="detectLinear()">
+                <span class="btn-icon">━</span>
+                <span class="btn-text">Linear Alignments</span>
+            </button>
+            <button class="sidebar-btn" onclick="detectPlatonicSolids()">
+                <span class="btn-icon">🔷</span>
+                <span class="btn-text">Platonic Solids Grid</span>
+            </button>
+            
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                <h4 style="color: var(--light-cyan); margin-bottom: 10px;">About Sacred Geometry</h4>
+                <p style="font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.8);">
+                    Sacred geometry reveals the mathematical patterns and proportions found in ancient structures worldwide. 
+                    These tools help identify golden ratio relationships, Fibonacci spirals, and geometric alignments between sites.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ley Lines Panel -->
+    <div class="feature-panel" id="leyLinesPanel">
+        <div class="panel-header">
+            <div class="panel-title">〰️ Ley Lines Detection</div>
+            <button class="close-panel" onclick="closePanel('leyLinesPanel')">✕</button>
+        </div>
+        <div class="panel-content">
+            <h4 style="color: var(--accent-gold); margin-bottom: 15px;">Analysis Options</h4>
+            <button class="sidebar-btn" onclick="autoDetectLeyLines()">
+                <span class="btn-icon">🔍</span>
+                <span class="btn-text">Auto-Detect Ley Lines</span>
+            </button>
+            <button class="sidebar-btn" onclick="showEarthGrid()">
+                <span class="btn-icon">🌐</span>
+                <span class="btn-text">Earth Energy Grid</span>
+            </button>
+            <button class="sidebar-btn" onclick="findNearestLeyLine()">
+                <span class="btn-icon">📍</span>
+                <span class="btn-text">Nearest Ley Line</span>
+            </button>
+            
+            <div style="margin-top: 20px;">
+                <h4 style="color: var(--light-cyan); margin-bottom: 10px;">Alignment Threshold</h4>
+                <input type="range" min="1" max="10" value="3" step="0.5" style="width: 100%;" oninput="updateLeyLineThreshold(this.value)">
+                <div style="text-align: center; margin-top: 5px; color: rgba(255,255,255,0.7);">
+                    <span id="leyLineThresholdValue">3°</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                <h4 style="color: var(--light-cyan); margin-bottom: 10px;">About Ley Lines</h4>
+                <p style="font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.8);">
+                    Ley lines are hypothetical alignments between ancient monuments and sacred sites. 
+                    This tool analyzes visible sites to detect potential alignments within your specified threshold.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Natal Chart Panel -->
+    <div class="feature-panel" id="natalChartPanel">
+        <div class="panel-header">
+            <div class="panel-title">♈ Live Natal Chart</div>
+            <button class="close-panel" onclick="closePanel('natalChartPanel')">✕</button>
+        </div>
+        <div class="panel-content" id="natalChartContent">
+            <!-- Natal chart will be populated dynamically -->
+        </div>
+    </div>
+    
+    <!-- Astronomy Panel -->
+    <div class="feature-panel" id="astronomyPanel">
+        <div class="panel-header">
+            <div class="panel-title">🌟 Astronomical Analysis</div>
+            <button class="close-panel" onclick="closePanel('astronomyPanel')">✕</button>
+        </div>
+        <div class="panel-content">
+            <h4 style="color: var(--accent-gold); margin-bottom: 15px;">Alignment Tools</h4>
+            <button class="sidebar-btn" onclick="calculateSunrise()">
+                <span class="btn-icon">🌅</span>
+                <span class="btn-text">Sunrise Direction</span>
+            </button>
+            <button class="sidebar-btn" onclick="calculateSunset()">
+                <span class="btn-icon">🌄</span>
+                <span class="btn-text">Sunset Direction</span>
+            </button>
+            <button class="sidebar-btn" onclick="calculateSolstice()">
+                <span class="btn-icon">☀️</span>
+                <span class="btn-text">Solstice Alignments</span>
+            </button>
+            <button class="sidebar-btn" onclick="calculateEquinox()">
+                <span class="btn-icon">⚖️</span>
+                <span class="btn-text">Equinox Alignments</span>
+            </button>
+            <button class="sidebar-btn" onclick="starMap()">
+                <span class="btn-icon">✨</span>
+                <span class="btn-text">Current Star Positions</span>
+            </button>
+            <button class="sidebar-btn" onclick="moonPhase()">
+                <span class="btn-icon">🌙</span>
+                <span class="btn-text">Moon Phase</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Sacred Frequencies Panel -->
+    <div class="feature-panel" id="frequencyPanel">
+        <div class="panel-header">
+            <div class="panel-title">🎵 Sacred Frequencies</div>
+            <button class="close-panel" onclick="closePanel('frequencyPanel')">✕</button>
+        </div>
+        <div class="panel-content">
+            <h4 style="color: var(--accent-gold); margin-bottom: 15px;">Frequency Zones</h4>
+            <button class="sidebar-btn" onclick="toggleFrequencyZone(432)">
+                <span class="btn-icon">🎶</span>
+                <span class="btn-text">432 Hz - Healing</span>
+            </button>
+            <button class="sidebar-btn" onclick="toggleFrequencyZone(528)">
+                <span class="btn-icon">💚</span>
+                <span class="btn-text">528 Hz - Love/DNA</span>
+            </button>
+            <button class="sidebar-btn" onclick="toggleFrequencyZone(963)">
+                <span class="btn-icon">👁️</span>
+                <span class="btn-text">963 Hz - Pineal</span>
+            </button>
+            <button class="sidebar-btn" onclick="toggleFrequencyZone(396)">
+                <span class="btn-icon">🔓</span>
+                <span class="btn-text">396 Hz - Liberation</span>
+            </button>
+            <button class="sidebar-btn" onclick="toggleFrequencyZone(741)">
+                <span class="btn-icon">🌈</span>
+                <span class="btn-text">741 Hz - Expression</span>
+            </button>
+            
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                <h4 style="color: var(--light-cyan); margin-bottom: 10px;">Solfeggio Frequencies</h4>
+                <p style="font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.8);">
+                    Ancient sacred frequencies used in Gregorian chants. Each frequency creates circular zones 
+                    on the map, showing areas of potential resonance around sacred sites.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Timeline Panel -->
+    <div class="feature-panel" id="timelinePanel">
+        <div class="panel-header">
+            <div class="panel-title">⏱️ Historical Timeline</div>
+            <button class="close-panel" onclick="closePanel('timelinePanel')">✕</button>
+        </div>
+        <div class="panel-content">
+            <div style="margin-bottom: 20px;">
+                <h4 style="color: var(--accent-gold); margin-bottom: 10px;">Filter by Era</h4>
+                <div style="text-align: center; font-size: 24px; color: var(--light-cyan); margin: 20px 0;" id="timelinePanelValue">All Eras</div>
+            </div>
+            
+            <input type="range" min="-10000" max="2025" value="2025" step="50" 
+                   style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; outline: none;" 
+                   id="timelinePanelSlider"
+                   oninput="updateTimelineFromPanel(this.value)">
+            
+            <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 11px; color: rgba(255,255,255,0.6);">
+                <span>10,000 BCE</span>
+                <span>5000 BCE</span>
+                <span>0 CE</span>
+                <span>1000 CE</span>
+                <span>Present</span>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <h4 style="color: var(--light-cyan); margin-bottom: 15px;">Quick Filters</h4>
+                <button class="sidebar-btn" onclick="setTimelinePeriod(-10000, -3000)">
+                    <span class="btn-icon">🌅</span>
+                    <span class="btn-text">Prehistoric (10,000-3000 BCE)</span>
+                </button>
+                <button class="sidebar-btn" onclick="setTimelinePeriod(-3000, -1000)">
+                    <span class="btn-icon">🏺</span>
+                    <span class="btn-text">Bronze Age (3000-1000 BCE)</span>
+                </button>
+                <button class="sidebar-btn" onclick="setTimelinePeriod(-1000, 500)">
+                    <span class="btn-icon">⚔️</span>
+                    <span class="btn-text">Classical Era (1000 BCE-500 CE)</span>
+                </button>
+                <button class="sidebar-btn" onclick="setTimelinePeriod(500, 1500)">
+                    <span class="btn-icon">🏰</span>
+                    <span class="btn-text">Medieval (500-1500 CE)</span>
+                </button>
+                <button class="sidebar-btn" onclick="setTimelinePeriod(-10000, 2025)">
+                    <span class="btn-icon">🌍</span>
+                    <span class="btn-text">All Eras</span>
+                </button>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                <h4 style="color: var(--light-cyan); margin-bottom: 10px;">Timeline Filter</h4>
+                <p style="font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.8);">
+                    Use the timeline slider to filter ancient sites by historical period. 
+                    Sites from the selected era and earlier will be displayed on the map.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- More panels would follow the same pattern... -->
+    
+    <script>
+        // ==================================================================
+        // CONFIGURATION & GLOBAL VARIABLES
+        // ==================================================================
+        
+        const CONFIG = {
+            GOOGLE_MAPS_API_KEY: 'AIzaSyB16lIKUClrBSHvAJZLq584GG4vZUaa3HQ', // Your Google Maps API key
+            SUPABASE_URL: 'https://hrfmssliipurbyxivanc.supabase.co', // Replace with your Supabase URL
+            SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhyZm1zc2xpaXB1cmJ5eGl2YW5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0MzgxNTIsImV4cCI6MjA3ODAxNDE1Mn0.DB9vrjGYYtkCgnSm25sn1y_7Yr3YJTkuayWlp1_s4io', // Replace with your Supabase anon key
+            DEFAULT_CENTER: { lat: 29.9792, lng: 31.1342 }, // Giza
+            DEFAULT_ZOOM: 3,
+            PYRAMID_DATABASE_URL: 'https://cdn.shopify.com/s/files/1/0853/8701/8573/files/pyramids_data.json?v=1762027215',
+            MEGALITH_DATABASES: {
+                burials: 'https://cdn.shopify.com/s/files/1/0853/8701/8573/files/megalithic_sites_burials_and_tombs.json?v=1762348072',
+                stones: 'https://cdn.shopify.com/s/files/1/0853/8701/8573/files/megalithic_sites_standing_stones_and_circles.json?v=1762347327',
+                rockart: 'https://cdn.shopify.com/s/files/1/0853/8701/8573/files/megalithic_sites_rock_art_and_carvings.json?v=1762347285',
+                settlements: 'https://cdn.shopify.com/s/files/1/0853/8701/8573/files/megalithic_sites_settlements_and_other.json?v=1762347305'
+            }
+        };
+        
+        // Global state variables
+        let map;
+        let markers = [];
+        let drawings = [];
+        let overlays = [];
+        let allSites = [];
+        let pyramidSites = [];
+        let megalithSites = [];
+        let currentUser = null;
+        let currentMapType = 'roadmap';
+        let labelsEnabled = false; // Start with labels OFF for cleaner look
+        let terrain3D = false;
+        let contextMenuLatLng = null;
+        let measurementMode = null;
+        let markerClusterer = null;
+        
+        // Layer visibility
+        let layersVisible = {
+            pyramids: true,
+            megaliths: false, // Start with megaliths OFF for faster loading
+            megalithsBurials: false,
+            megalithsStones: false,
+            megalithsRockArt: false,
+            megalithsSettlements: false,
+            temples: false,
+            sacred: false
+        };
+        
+        // Frequency zones
+        let activeFrequencies = new Set();
+        let frequencyOverlays = {};
+        
+        // Natal chart data
+        let natalChartActive = false;
+        let natalChartOverlay = null;
+        
+        // ==================================================================
+        // INITIALIZATION
+        // ==================================================================
+        
+        // Track if user is ready
+        let userReady = false;
+        let mapsLoaded = false;
+        
+        function checkRegistration() {
+            const userData = localStorage.getItem('pyramason_user');
+            if (userData) {
+                currentUser = JSON.parse(userData);
+                document.getElementById('registrationModal').style.display = 'none';
+                userReady = true;
+                // Don't call initMap here - let Google Maps callback handle it
+                if (mapsLoaded) {
+                    initMap();
+                }
+            } else {
+                document.getElementById('registrationModal').style.display = 'flex';
+            }
+        }
+        
+        function handleRegistration(event) {
+            event.preventDefault();
+            const email = document.getElementById('regEmail').value;
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            
+            // Store user data (in production, this would be Supabase)
+            const userData = {
+                email: email,
+                username: username,
+                registeredAt: new Date().toISOString(),
+                subscription: 'free'
+            };
+            
+            localStorage.setItem('pyramason_user', JSON.stringify(userData));
+            currentUser = userData;
+            
+            document.getElementById('registrationModal').style.display = 'none';
+            userReady = true;
+            
+            showModal('✨', 'Welcome to Pyramason!', 
+                `Welcome, ${username}! Your account has been created. You now have access to all features.`);
+            
+            // Only init map if Google Maps is already loaded
+            if (mapsLoaded) {
+                initMap();
+            }
+        }
+        
+        function continueAsGuest() {
+            currentUser = { guest: true };
+            document.getElementById('registrationModal').style.display = 'none';
+            userReady = true;
+            
+            // Only init map if Google Maps is already loaded
+            if (mapsLoaded) {
+                initMap();
+            }
+        }
+        
+        // ==================================================================
+        // GOOGLE MAPS INITIALIZATION
+        // ==================================================================
+        
+        function initMap() {
+            // Mark that Google Maps has loaded
+            mapsLoaded = true;
+            
+            // If user isn't ready yet, wait for them
+            if (!userReady) {
+                console.log('Google Maps loaded, waiting for user...');
+                return;
+            }
+            
+            console.log('Initializing map...');
+            
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: CONFIG.DEFAULT_CENTER,
+                zoom: CONFIG.DEFAULT_ZOOM,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                styles: [
+                    {
+                        featureType: 'all',
+                        elementType: 'labels',
+                        stylers: [{ visibility: 'off' }] // Start with labels OFF
+                    },
+                    {
+                        featureType: 'water',
+                        elementType: 'geometry',
+                        stylers: [{ color: '#0a1128' }]
+                    },
+                    {
+                        featureType: 'landscape',
+                        elementType: 'geometry',
+                        stylers: [{ color: '#1a1a2e' }]
+                    },
+                    {
+                        featureType: 'administrative.country',
+                        elementType: 'geometry.stroke',
+                        stylers: [{ color: '#6A1B9A' }, { weight: 0.5 }]
+                    }
+                ],
+                streetViewControl: false,
+                mapTypeControl: false,
+                fullscreenControl: false,
+                zoomControl: true,
+                zoomControlOptions: {
+                    position: google.maps.ControlPosition.LEFT_BOTTOM
+                }
+            });
+            
+            // Setup right-click context menu
+            map.addListener('rightclick', function(e) {
+                showContextMenu(e);
+            });
+            
+            // Hide context menu on left click
+            map.addListener('click', function() {
+                hideContextMenu();
+            });
+            
+            // Load all site data
+            loadAllSites();
+            
+            // Initialize timeline
+            initializeTimeline();
+        }
+        
+        // Make initMap available globally for Google Maps callback
+        window.initMap = initMap;
+        
+        // ==================================================================
+        // DATA LOADING
+        // ==================================================================
+        
+        async function loadAllSites() {
+            showLoading(true);
+            
+            try {
+                // Load PYRAMIDS FIRST for faster initial display
+                console.log('Loading pyramid data...');
+                const pyramidResponse = await fetch(CONFIG.PYRAMID_DATABASE_URL);
+                const pyramidData = await pyramidResponse.json();
+                
+                // Handle different JSON structures
+                if (Array.isArray(pyramidData)) {
+                    pyramidSites = pyramidData;
+                } else if (pyramidData.pyramids && Array.isArray(pyramidData.pyramids)) {
+                    pyramidSites = pyramidData.pyramids;
+                } else if (pyramidData.data && Array.isArray(pyramidData.data)) {
+                    pyramidSites = pyramidData.data;
+                } else if (pyramidData.sites && Array.isArray(pyramidData.sites)) {
+                    pyramidSites = pyramidData.sites;
+                } else {
+                    console.warn('Unexpected pyramid data structure:', pyramidData);
+                    pyramidSites = [];
+                }
+                
+                console.log(`✅ Loaded ${pyramidSites.length} pyramids`);
+                
+                // Add pyramids to allSites immediately
+                allSites = pyramidSites.map(site => ({ ...site, type: 'pyramid' }));
+                
+                // Create markers for pyramids FIRST
+                createMarkers();
+                
+                showLoading(false);
+                showModal('✨', 'Pyramids Loaded!', 
+                    `Loaded ${pyramidSites.length.toLocaleString()} pyramids!<br><br>
+                    <small>Megalithic sites loading in background...</small>`);
+                
+                // Load megalithic sites in BACKGROUND (non-blocking)
+                loadMegalithsInBackground();
+                
+            } catch (error) {
+                console.error('Error loading pyramids:', error);
+                showLoading(false);
+                
+                // Use fallback sample data
+                console.log('Using fallback sample data...');
+                allSites = generateSampleData();
+                createMarkers();
+                
+                showModal('⚠️', 'Using Sample Data', 
+                    `Could not load full database. Displaying ${allSites.length} sample sites.<br><br>
+                    <small>Error: ${error.message}</small>`);
+            }
+        }
+        
+        // Load megalithic sites in background
+        async function loadMegalithsInBackground() {
+            console.log('🔄 Loading megalithic sites in background...');
+            
+            megalithSites = [];
+            const categories = Object.entries(CONFIG.MEGALITH_DATABASES);
+            
+            for (const [category, url] of categories) {
+                try {
+                    console.log(`Loading ${category}...`);
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    // Handle different JSON structures
+                    let sites = [];
+                    if (Array.isArray(data)) {
+                        sites = data;
+                    } else if (data.sites && Array.isArray(data.sites)) {
+                        sites = data.sites;
+                    } else if (data.data && Array.isArray(data.data)) {
+                        sites = data.data;
+                    } else {
+                        console.warn(`Unexpected ${category} structure:`, data);
+                    }
+                    
+                    // Add category type to each site
+                    const categorizedSites = sites.map(site => ({
+                        ...site,
+                        type: 'megalith',
+                        subtype: category // burials, stones, rockart, settlements
+                    }));
+                    
+                    megalithSites = megalithSites.concat(categorizedSites);
+                    console.log(`✅ Loaded ${sites.length} ${category} (Total megaliths: ${megalithSites.length})`);
+                    
+                    // Update allSites and refresh markers after each batch
+                    allSites = [
+                        ...pyramidSites.map(site => ({ ...site, type: 'pyramid' })),
+                        ...megalithSites
+                    ];
+                    
+                    // Only recreate markers if megalith layers are visible
+                    if (layersVisible.megaliths || 
+                        layersVisible.megalithsBurials || 
+                        layersVisible.megalithsStones || 
+                        layersVisible.megalithsRockArt || 
+                        layersVisible.megalithsSettlements) {
+                        createMarkers();
+                    }
+                    
+                } catch (error) {
+                    console.warn(`Failed to load ${category}:`, error);
+                }
+            }
+            
+            console.log(`✅ All sites loaded! Total: ${allSites.length} (${pyramidSites.length} pyramids, ${megalithSites.length} megaliths)`);
+        }
+        
+        // Fallback sample data generator
+        function generateSampleData() {
+            const samples = [
+                { name: 'Great Pyramid of Giza', lat: 29.9792, lng: 31.1342, type: 'pyramid', era: 'Ancient Egypt', country: 'Egypt' },
+                { name: 'Pyramid of Khafre', lat: 29.9753, lng: 31.1309, type: 'pyramid', era: 'Ancient Egypt', country: 'Egypt' },
+                { name: 'Pyramid of Menkaure', lat: 29.9722, lng: 31.1281, type: 'pyramid', era: 'Ancient Egypt', country: 'Egypt' },
+                { name: 'Stonehenge', lat: 51.1789, lng: -1.8262, type: 'megalith', era: 'Neolithic', country: 'UK' },
+                { name: 'Pyramid of the Sun', lat: 19.6925, lng: -98.8438, type: 'pyramid', era: 'Pre-Columbian', country: 'Mexico' },
+                { name: 'Angkor Wat', lat: 13.4125, lng: 103.8670, type: 'temple', era: 'Khmer Empire', country: 'Cambodia' },
+                { name: 'Machu Picchu', lat: -13.1631, lng: -72.5450, type: 'temple', era: 'Inca', country: 'Peru' },
+                { name: 'Borobudur', lat: -7.6079, lng: 110.2038, type: 'temple', era: 'Medieval', country: 'Indonesia' },
+                { name: 'Newgrange', lat: 53.6947, lng: -6.4750, type: 'megalith', era: 'Neolithic', country: 'Ireland' },
+                { name: 'Göbekli Tepe', lat: 37.2232, lng: 38.9225, type: 'megalith', era: 'Pre-Pottery Neolithic', country: 'Turkey' }
+            ];
+            
+            return samples;
+        }
+        
+        // ==================================================================
+        // MARKER CREATION
+        // ==================================================================
+        
+        function createMarkers() {
+            // Clear existing markers
+            if (markerClusterer) {
+                try {
+                    markerClusterer.clearMarkers();
+                } catch (e) {
+                    console.warn('Error clearing clusterer:', e);
+                }
+                markerClusterer = null;
+            }
+            markers.forEach(marker => {
+                try {
+                    marker.setMap(null);
+                } catch (e) {
+                    // Ignore
+                }
+            });
+            markers = [];
+            
+            const markersToCluster = [];
+            
+            // Filter sites based on timeline and visible layers
+            const filteredSites = filterSitesByTimeline(allSites);
+            
+            console.log(`Creating markers for ${filteredSites.length} sites...`);
+            
+            let createdCount = 0;
+            
+            filteredSites.forEach(site => {
+                // Check if layer is visible
+                if (site.type === 'pyramid' && !layersVisible.pyramids) return;
+                
+                // Check megalith subtypes
+                if (site.type === 'megalith') {
+                    if (!layersVisible.megaliths) {
+                        // Check individual subtypes
+                        if (site.subtype === 'burials' && !layersVisible.megalithsBurials) return;
+                        if (site.subtype === 'stones' && !layersVisible.megalithsStones) return;
+                        if (site.subtype === 'rockart' && !layersVisible.megalithsRockArt) return;
+                        if (site.subtype === 'settlements' && !layersVisible.megalithsSettlements) return;
+                        if (!site.subtype) return; // Skip if no subtype and megaliths not enabled
+                    }
+                }
+                
+                if (site.type === 'temple' && !layersVisible.temples) return;
+                
+                // Get coordinates (handle different JSON structures)
+                let lat, lng;
+                if (site.latitude && site.longitude) {
+                    lat = parseFloat(site.latitude);
+                    lng = parseFloat(site.longitude);
+                } else if (site.lat && site.lng) {
+                    lat = parseFloat(site.lat);
+                    lng = parseFloat(site.lng);
+                } else if (site.coordinates) {
+                    lat = parseFloat(site.coordinates.lat || site.coordinates.latitude);
+                    lng = parseFloat(site.coordinates.lng || site.coordinates.longitude);
+                }
+                
+                if (!lat || !lng || isNaN(lat) || isNaN(lng)) return;
+                if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return;
+                
+                // Determine icon based on type and subtype
+                let icon;
+                if (site.type === 'pyramid') {
+                    icon = {
+                        path: 'M 0,-12 L -10,12 L 10,12 Z', // Triangle
+                        scale: 1.2,
+                        fillColor: '#FFD700',
+                        fillOpacity: 0.9,
+                        strokeColor: '#fff',
+                        strokeWeight: 2
+                    };
+                } else if (site.type === 'megalith') {
+                    // Different icons for different megalith types
+                    if (site.subtype === 'burials') {
+                        icon = {
+                            path: 'M -6,-6 L -6,6 L 6,6 L 6,-6 Z', // Square for burials
+                            scale: 1,
+                            fillColor: '#8B4513',
+                            fillOpacity: 0.85,
+                            strokeColor: '#fff',
+                            strokeWeight: 1.5
+                        };
+                    } else if (site.subtype === 'stones') {
+                        icon = {
+                            path: 'M 0,-8 L -8,8 L 8,8 Z', // Triangle for standing stones
+                            scale: 1,
+                            fillColor: '#808080',
+                            fillOpacity: 0.85,
+                            strokeColor: '#fff',
+                            strokeWeight: 1.5
+                        };
+                    } else if (site.subtype === 'rockart') {
+                        icon = {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 5,
+                            fillColor: '#FF6B6B',
+                            fillOpacity: 0.85,
+                            strokeColor: '#fff',
+                            strokeWeight: 1.5
+                        };
+                    } else if (site.subtype === 'settlements') {
+                        icon = {
+                            path: 'M -5,-5 L -5,5 L 5,5 L 5,-5 Z M -3,-3 L -3,3 L 3,3 L 3,-3 Z', // House shape
+                            scale: 1,
+                            fillColor: '#4ECDC4',
+                            fillOpacity: 0.85,
+                            strokeColor: '#fff',
+                            strokeWeight: 1.5
+                        };
+                    } else {
+                        // Default megalith
+                        icon = {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 5,
+                            fillColor: '#9C27B0',
+                            fillOpacity: 0.85,
+                            strokeColor: '#fff',
+                            strokeWeight: 1.5
+                        };
+                    }
+                } else {
+                    // Default icon
+                    icon = {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 6,
+                        fillColor: '#00BCD4',
+                        fillOpacity: 0.85,
+                        strokeColor: '#fff',
+                        strokeWeight: 2
+                    };
+                }
+                
+                // Create marker
+                const marker = new google.maps.Marker({
+                    position: { lat, lng },
+                    map: map,
+                    title: site.name || site.title || 'Unknown Site',
+                    icon: icon,
+                    optimized: true
+                });
+                
+                // Add click listener
+                marker.addListener('click', () => {
+                    showSiteInfo(site, lat, lng);
+                });
+                
+                markers.push(marker);
+                markersToCluster.push(marker);
+                createdCount++;
+            });
+            
+            console.log(`✅ Created ${createdCount} markers`);
+            
+            // Initialize marker clusterer if library is loaded and we have markers
+            if (typeof markerClusterer !== 'undefined' && window.markerClusterer && markersToCluster.length > 0) {
+                try {
+                    markerClusterer = new markerClusterer.MarkerClusterer({ 
+                        map, 
+                        markers: markersToCluster,
+                        renderer: {
+                            render: ({ count, position }) => {
+                                const color = count > 100 ? '#FFD700' : count > 50 ? '#9C27B0' : '#00BCD4';
+                                return new google.maps.Marker({
+                                    position,
+                                    icon: {
+                                        url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60">
+                                                <circle cx="30" cy="30" r="28" fill="${color}" opacity="0.85" stroke="#fff" stroke-width="3"/>
+                                                <text x="30" y="36" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">${count}</text>
+                                            </svg>
+                                        `)}`,
+                                        scaledSize: new google.maps.Size(60, 60)
+                                    },
+                                    zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count
+                                });
+                            }
+                        }
+                    });
+                    console.log('✅ Marker clustering enabled');
+                } catch (error) {
+                    console.warn('Clustering failed, showing individual markers:', error);
+                }
+            } else if (markersToCluster.length === 0) {
+                console.log('ℹ️ No markers to display with current filters');
+            } else {
+                console.log('ℹ️ Marker clustering library not loaded yet');
+            }
+        }
+        
+        // ==================================================================
+        // SITE INFO DISPLAY
+        // ==================================================================
+        
+        function showSiteInfo(site, lat, lng) {
+            const name = site.name || site.title || 'Unknown Site';
+            const description = site.description || site.info || 'No description available';
+            const type = site.type === 'pyramid' ? '🔺 Pyramid' : '🗿 Megalithic Structure';
+            const era = site.era || site.period || site.age || 'Unknown Era';
+            const country = site.country || site.location || 'Unknown';
+            
+            let content = `
+                <div style="max-width: 400px;">
+                    <h3 style="color: var(--accent-gold); margin-bottom: 10px;">${name}</h3>
+                    <p style="color: var(--light-cyan); margin-bottom: 15px;">${type}</p>
+                    
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                        <p style="margin-bottom: 10px;"><strong>Era:</strong> ${era}</p>
+                        <p style="margin-bottom: 10px;"><strong>Location:</strong> ${country}</p>
+                        <p style="margin-bottom: 10px;"><strong>Coordinates:</strong> ${lat.toFixed(5)}, ${lng.toFixed(5)}</p>
+                    </div>
+                    
+                    <p style="line-height: 1.6; margin-bottom: 15px;">${description}</p>
+                    
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="sidebar-btn" style="flex: 1;" onclick="saveToMyPlaces('${name}', ${lat}, ${lng})">
+                            <span class="btn-icon">💾</span>
+                            <span class="btn-text">Save</span>
+                        </button>
+                        <button class="sidebar-btn" style="flex: 1;" onclick="shareLocation(${lat}, ${lng})">
+                            <span class="btn-icon">🔗</span>
+                            <span class="btn-text">Share</span>
+                        </button>
+                        <button class="sidebar-btn" style="flex: 1;" onclick="streetViewAtLocation(${lat}, ${lng})">
+                            <span class="btn-icon">👁️</span>
+                            <span class="btn-text">Street View</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            showModal('📍', name, content);
+        }
+        
+        // ==================================================================
+        // LAYER MANAGEMENT
+        // ==================================================================
+        
+        function toggleLayer(layerName) {
+            layersVisible[layerName] = !layersVisible[layerName];
+            
+            // If toggling main megaliths, toggle all subtypes
+            if (layerName === 'megaliths') {
+                const newState = layersVisible.megaliths;
+                layersVisible.megalithsBurials = newState;
+                layersVisible.megalithsStones = newState;
+                layersVisible.megalithsRockArt = newState;
+                layersVisible.megalithsSettlements = newState;
+                
+                // Update subtype buttons
+                ['megalithsBurials', 'megalithsStones', 'megalithsRockArt', 'megalithsSettlements'].forEach(sub => {
+                    const btn = document.querySelector(`[onclick="toggleLayer('${sub}')"]`);
+                    if (btn) {
+                        if (newState) {
+                            btn.classList.add('active');
+                        } else {
+                            btn.classList.remove('active');
+                        }
+                    }
+                });
+            }
+            
+            createMarkers(); // Recreate markers with new visibility
+            
+            // Update button state
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.toggle('active');
+            }
+        }
+        
+        function toggleAllMegaliths(show) {
+            layersVisible.megaliths = show;
+            layersVisible.megalithsBurials = show;
+            layersVisible.megalithsStones = show;
+            layersVisible.megalithsRockArt = show;
+            layersVisible.megalithsSettlements = show;
+            createMarkers();
+        }
+        
+        // ==================================================================
+        // PANEL MANAGEMENT
+        // ==================================================================
+        
+        function togglePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            const isActive = panel.classList.contains('active');
+            
+            // Close all panels
+            document.querySelectorAll('.feature-panel').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            // Open requested panel if it wasn't active
+            if (!isActive) {
+                panel.classList.add('active');
+                
+                // Special initialization for natal chart
+                if (panelId === 'natalChartPanel') {
+                    initializeNatalChart();
+                }
+            }
+        }
+        
+        function closePanel(panelId) {
+            document.getElementById(panelId).classList.remove('active');
+            
+            // Special cleanup for natal chart
+            if (panelId === 'natalChartPanel') {
+                clearNatalChartOverlay();
+            }
+        }
+        
+        // ==================================================================
+        // NATAL CHART - LIVE ZODIAC POSITIONS
+        // ==================================================================
+        
+        function initializeNatalChart() {
+            const content = document.getElementById('natalChartContent');
+            const now = new Date();
+            
+            // Calculate current planetary positions
+            const positions = calculateAstronomicalPositions(now);
+            
+            let html = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h4 style="color: var(--accent-gold);">🌟 Current Celestial Positions</h4>
+                    <p style="color: var(--light-cyan); font-size: 14px;">${now.toLocaleDateString()} ${now.toLocaleTimeString()}</p>
+                </div>
+                
+                <div class="natal-chart-wheel">
+            `;
+            
+            // Add zodiac signs around the wheel
+            const zodiacSigns = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
+            zodiacSigns.forEach((sign, index) => {
+                const angle = (index * 30) - 90; // Start from Aries at east
+                const x = 150 + 120 * Math.cos(angle * Math.PI / 180);
+                const y = 150 + 120 * Math.sin(angle * Math.PI / 180);
+                html += `<div class="zodiac-sign" style="left: ${x - 20}px; top: ${y - 20}px;">${sign}</div>`;
+            });
+            
+            // Add planet positions
+            positions.planets.forEach(planet => {
+                const angle = planet.longitude - 90; // Adjust for coordinate system
+                const radius = 80; // Inner circle for planets
+                const x = 150 + radius * Math.cos(angle * Math.PI / 180);
+                const y = 150 + radius * Math.sin(angle * Math.PI / 180);
+                html += `
+                    <div class="planet-position" style="left: ${x - 15}px; top: ${y - 15}px;" title="${planet.name}">
+                        ${planet.symbol}
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            
+            // Add planet details
+            html += `<div style="margin-top: 30px;">`;
+            positions.planets.forEach(planet => {
+                html += `
+                    <div class="planet-info">
+                        <div class="planet-name">${planet.symbol} ${planet.name}</div>
+                        <div class="planet-details">
+                            ${planet.sign.symbol} ${planet.sign.name} ${planet.longitude.toFixed(2)}°<br>
+                            ${planet.retrograde ? '℞ Retrograde' : '⏩ Direct'}
+                        </div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            
+            // Add overlay toggle
+            html += `
+                <div style="margin-top: 20px;">
+                    <button class="sidebar-btn active" onclick="toggleNatalChartOverlay()">
+                        <span class="btn-icon">🌍</span>
+                        <span class="btn-text">Show on Map</span>
+                    </button>
+                    <button class="sidebar-btn" onclick="updateNatalChart()">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Refresh</span>
+                    </button>
+                </div>
+            `;
+            
+            content.innerHTML = html;
+            
+            // Automatically show overlay
+            if (!natalChartActive) {
+                toggleNatalChartOverlay();
+            }
+        }
+        
+        function calculateAstronomicalPositions(date) {
+            // Simplified astronomical calculations
+            // In production, use a proper astronomy library like astronomy-engine
+            
+            const JD = dateToJulianDay(date);
+            const T = (JD - 2451545.0) / 36525; // Centuries from J2000
+            
+            const planets = [];
+            
+            // Sun (simplified)
+            const sunLongitude = (280.46646 + 36000.76983 * T) % 360;
+            const sunSign = getZodiacSign(sunLongitude);
+            planets.push({
+                name: 'Sun',
+                symbol: '☉',
+                longitude: sunLongitude,
+                sign: sunSign,
+                retrograde: false,
+                color: '#FFD700'
+            });
+            
+            // Moon (very simplified)
+            const moonLongitude = (218.316 + 481267.8813 * T) % 360;
+            const moonSign = getZodiacSign(moonLongitude);
+            planets.push({
+                name: 'Moon',
+                symbol: '☽',
+                longitude: moonLongitude,
+                sign: moonSign,
+                retrograde: false,
+                color: '#C0C0C0'
+            });
+            
+            // Mercury (simplified)
+            const mercuryLongitude = (252.25 + 149472.67 * T) % 360;
+            const mercurySign = getZodiacSign(mercuryLongitude);
+            planets.push({
+                name: 'Mercury',
+                symbol: '☿',
+                longitude: mercuryLongitude,
+                sign: mercurySign,
+                retrograde: Math.random() < 0.2, // Simplified retrograde
+                color: '#B0B0B0'
+            });
+            
+            // Venus (simplified)
+            const venusLongitude = (181.98 + 58517.82 * T) % 360;
+            const venusSign = getZodiacSign(venusLongitude);
+            planets.push({
+                name: 'Venus',
+                symbol: '♀',
+                longitude: venusLongitude,
+                sign: venusSign,
+                retrograde: false,
+                color: '#FFC0CB'
+            });
+            
+            // Mars (simplified)
+            const marsLongitude = (355.45 + 19140.3 * T) % 360;
+            const marsSign = getZodiacSign(marsLongitude);
+            planets.push({
+                name: 'Mars',
+                symbol: '♂',
+                longitude: marsLongitude,
+                sign: marsSign,
+                retrograde: false,
+                color: '#FF4500'
+            });
+            
+            // Jupiter (simplified)
+            const jupiterLongitude = (34.35 + 3034.90 * T) % 360;
+            const jupiterSign = getZodiacSign(jupiterLongitude);
+            planets.push({
+                name: 'Jupiter',
+                symbol: '♃',
+                longitude: jupiterLongitude,
+                sign: jupiterSign,
+                retrograde: false,
+                color: '#FFA500'
+            });
+            
+            // Saturn (simplified)
+            const saturnLongitude = (50.08 + 1222.11 * T) % 360;
+            const saturnSign = getZodiacSign(saturnLongitude);
+            planets.push({
+                name: 'Saturn',
+                symbol: '♄',
+                longitude: saturnLongitude,
+                sign: saturnSign,
+                retrograde: false,
+                color: '#DAA520'
+            });
+            
+            return { planets, date };
+        }
+        
+        function dateToJulianDay(date) {
+            const a = Math.floor((14 - (date.getMonth() + 1)) / 12);
+            const y = date.getFullYear() + 4800 - a;
+            const m = (date.getMonth() + 1) + 12 * a - 3;
+            
+            let jd = date.getDate() + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+            
+            const hour = date.getHours() + date.getMinutes() / 60 + date.getSeconds() / 3600;
+            jd += (hour - 12) / 24;
+            
+            return jd;
+        }
+        
+        function getZodiacSign(longitude) {
+            const signs = [
+                { name: 'Aries', symbol: '♈', start: 0 },
+                { name: 'Taurus', symbol: '♉', start: 30 },
+                { name: 'Gemini', symbol: '♊', start: 60 },
+                { name: 'Cancer', symbol: '♋', start: 90 },
+                { name: 'Leo', symbol: '♌', start: 120 },
+                { name: 'Virgo', symbol: '♍', start: 150 },
+                { name: 'Libra', symbol: '♎', start: 180 },
+                { name: 'Scorpio', symbol: '♏', start: 210 },
+                { name: 'Sagittarius', symbol: '♐', start: 240 },
+                { name: 'Capricorn', symbol: '♑', start: 270 },
+                { name: 'Aquarius', symbol: '♒', start: 300 },
+                { name: 'Pisces', symbol: '♓', start: 330 }
+            ];
+            
+            const normalizedLong = ((longitude % 360) + 360) % 360;
+            return signs.find(sign => normalizedLong >= sign.start && normalizedLong < sign.start + 30) || signs[0];
+        }
+        
+        function toggleNatalChartOverlay() {
+            if (natalChartActive) {
+                clearNatalChartOverlay();
+            } else {
+                createNatalChartOverlay();
+            }
+        }
+        
+        function createNatalChartOverlay() {
+            clearNatalChartOverlay();
+            
+            const positions = calculateAstronomicalPositions(new Date());
+            const center = map.getCenter();
+            
+            // Create zodiac belt circles
+            const zodiacRadius = 2000; // km from center
+            
+            positions.planets.forEach(planet => {
+                const angle = planet.longitude - 90;
+                const destLat = center.lat() + (zodiacRadius / 111) * Math.sin(angle * Math.PI / 180);
+                const destLng = center.lng() + (zodiacRadius / (111 * Math.cos(center.lat() * Math.PI / 180))) * Math.cos(angle * Math.PI / 180);
+                
+                // Create marker for planet position
+                const marker = new google.maps.Marker({
+                    position: { lat: destLat, lng: destLng },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 15,
+                        fillColor: planet.color,
+                        fillOpacity: 0.8,
+                        strokeColor: '#fff',
+                        strokeWeight: 2
+                    },
+                    title: `${planet.name} in ${planet.sign.name}`,
+                    zIndex: 1000
+                });
+                
+                overlays.push(marker);
+                
+                // Create line from center to planet
+                const line = new google.maps.Polyline({
+                    path: [center, { lat: destLat, lng: destLng }],
+                    strokeColor: planet.color,
+                    strokeWeight: 2,
+                    strokeOpacity: 0.6,
+                    map: map
+                });
+                
+                overlays.push(line);
+            });
+            
+            // Create zodiac belt circle
+            const circle = new google.maps.Circle({
+                center: center,
+                radius: zodiacRadius * 1000, // Convert to meters
+                strokeColor: '#FFD700',
+                strokeWeight: 2,
+                strokeOpacity: 0.5,
+                fillColor: '#FFD700',
+                fillOpacity: 0.1,
+                map: map
+            });
+            
+            overlays.push(circle);
+            
+            natalChartActive = true;
+            showModal('♈', 'Natal Chart Active', 
+                'Live zodiac positions are now displayed on the map. Planetary positions update in real-time!');
+        }
+        
+        function clearNatalChartOverlay() {
+            overlays.forEach(overlay => {
+                if (overlay.setMap) overlay.setMap(null);
+            });
+            overlays = [];
+            natalChartActive = false;
+        }
+        
+        function updateNatalChart() {
+            initializeNatalChart();
+            if (natalChartActive) {
+                createNatalChartOverlay();
+            }
+        }
+        
+        // ==================================================================
+        // SACRED GEOMETRY FUNCTIONS
+        // ==================================================================
+        
+        function detectGoldenRatio() {
+            showLoading(true);
+            
+            const PHI = 1.618033988749895;
+            const tolerance = 0.05; // 5% tolerance
+            const visibleSites = getVisibleSites();
+            const detections = [];
+            
+            // Check all combinations of 3 sites for golden ratio triangles
+            for (let i = 0; i < visibleSites.length && i < 100; i++) {
+                for (let j = i + 1; j < visibleSites.length && j < 100; j++) {
+                    for (let k = j + 1; k < visibleSites.length && k < 100; k++) {
+                        const site1 = visibleSites[i];
+                        const site2 = visibleSites[j];
+                        const site3 = visibleSites[k];
+                        
+                        const d12 = haversineDistance(site1.lat, site1.lng, site2.lat, site2.lng);
+                        const d23 = haversineDistance(site2.lat, site2.lng, site3.lat, site3.lng);
+                        const d31 = haversineDistance(site3.lat, site3.lng, site1.lat, site1.lng);
+                        
+                        const sides = [d12, d23, d31].sort((a, b) => a - b);
+                        const ratio = sides[2] / sides[1];
+                        
+                        if (Math.abs(ratio - PHI) / PHI < tolerance) {
+                            detections.push({
+                                sites: [site1, site2, site3],
+                                sides: sides,
+                                ratio: ratio
+                            });
+                        }
+                    }
+                }
+            }
+            
+            showLoading(false);
+            
+            if (detections.length > 0) {
+                // Draw the best detection
+                const best = detections[0];
+                drawTriangle(best.sites, '#FFD700');
+                
+                showModal('φ', 'Golden Ratio Found!', 
+                    `Detected ${detections.length} golden ratio formations!<br><br>
+                    <strong>Best Match:</strong><br>
+                    ${best.sites.map(s => s.name).join(' ↔ ')}<br><br>
+                    Ratio: ${best.ratio.toFixed(4)} (φ = 1.618)`);
+            } else {
+                showModal('φ', 'No Golden Ratios', 
+                    'No golden ratio formations detected in the visible area. Try zooming in or moving to a different region.');
+            }
+        }
+        
+        function detectFibonacci() {
+            showModal('🌀', 'Fibonacci Analysis', 
+                'Fibonacci spiral detection is analyzing the visible sites. This feature identifies logarithmic spirals connecting ancient monuments.');
+        }
+        
+        function detectEquilateral() {
+            showLoading(true);
+            
+            const tolerance = 0.05; // 5% tolerance
+            const visibleSites = getVisibleSites();
+            const detections = [];
+            
+            for (let i = 0; i < visibleSites.length && i < 100; i++) {
+                for (let j = i + 1; j < visibleSites.length && j < 100; j++) {
+                    for (let k = j + 1; k < visibleSites.length && k < 100; k++) {
+                        const site1 = visibleSites[i];
+                        const site2 = visibleSites[j];
+                        const site3 = visibleSites[k];
+                        
+                        const d12 = haversineDistance(site1.lat, site1.lng, site2.lat, site2.lng);
+                        const d23 = haversineDistance(site2.lat, site2.lng, site3.lat, site3.lng);
+                        const d31 = haversineDistance(site3.lat, site3.lng, site1.lat, site1.lng);
+                        
+                        const avgDist = (d12 + d23 + d31) / 3;
+                        
+                        if (Math.abs(d12 - avgDist) / avgDist < tolerance &&
+                            Math.abs(d23 - avgDist) / avgDist < tolerance &&
+                            Math.abs(d31 - avgDist) / avgDist < tolerance) {
+                            detections.push({
+                                sites: [site1, site2, site3],
+                                avgDist: avgDist
+                            });
+                        }
+                    }
+                }
+            }
+            
+            showLoading(false);
+            
+            if (detections.length > 0) {
+                const best = detections[0];
+                drawTriangle(best.sites, '#00BCD4');
+                
+                showModal('△', 'Equilateral Triangle!', 
+                    `Found ${detections.length} equilateral formations!<br><br>
+                    <strong>Perfect Triangle:</strong><br>
+                    ${best.sites.map(s => s.name).join(' ↔ ')}<br><br>
+                    Side Length: ${best.avgDist.toFixed(2)} km`);
+            } else {
+                showModal('△', 'No Equilateral Triangles', 
+                    'No equilateral triangles detected in the visible area.');
+            }
+        }
+        
+        function detectPythagorean() {
+            showModal('∟', 'Pythagorean Analysis', 
+                'Analyzing for 3-4-5 right triangles and other Pythagorean triples...');
+        }
+        
+        function detectCircular() {
+            showModal('⭕', 'Circular Analysis', 
+                'Detecting circular formations and radial symmetry patterns...');
+        }
+        
+        function detectLinear() {
+            showModal('━', 'Linear Analysis', 
+                'Finding linear alignments between visible ancient sites...');
+        }
+        
+        function detectPlatonicSolids() {
+            clearDrawings();
+            
+            // Draw icosahedron vertices on Earth
+            const icosahedronVertices = [
+                { lat: 0, lng: 0 },
+                { lat: 31.7175, lng: -144 },
+                { lat: 31.7175, lng: -72 },
+                { lat: 31.7175, lng: 0 },
+                { lat: 31.7175, lng: 72 },
+                { lat: 31.7175, lng: 144 },
+                { lat: -31.7175, lng: -144 },
+                { lat: -31.7175, lng: -72 },
+                { lat: -31.7175, lng: 0 },
+                { lat: -31.7175, lng: 72 },
+                { lat: -31.7175, lng: 144 },
+                { lat: 90, lng: 0 },
+                { lat: -90, lng: 0 }
+            ];
+            
+            // Draw vertices
+            icosahedronVertices.forEach(vertex => {
+                const marker = new google.maps.Marker({
+                    position: vertex,
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 8,
+                        fillColor: '#9C27B0',
+                        fillOpacity: 0.8,
+                        strokeColor: '#FFD700',
+                        strokeWeight: 2
+                    },
+                    title: 'Icosahedron Vertex'
+                });
+                
+                drawings.push(marker);
+            });
+            
+            // Draw edges
+            const edges = [
+                [0, 1], [0, 2], [0, 3], [0, 4], [0, 5],
+                [1, 2], [2, 3], [3, 4], [4, 5], [5, 1],
+                [1, 6], [2, 7], [3, 8], [4, 9], [5, 10],
+                [6, 7], [7, 8], [8, 9], [9, 10], [10, 6]
+            ];
+            
+            edges.forEach(([i, j]) => {
+                const line = new google.maps.Polyline({
+                    path: [icosahedronVertices[i], icosahedronVertices[j]],
+                    strokeColor: '#9C27B0',
+                    strokeWeight: 2,
+                    strokeOpacity: 0.5,
+                    geodesic: true,
+                    map: map
+                });
+                
+                drawings.push(line);
+            });
+            
+            showModal('🔷', 'Platonic Solids Grid', 
+                'Icosahedron Earth grid overlay activated! This grid represents one of the hypothetical energy grids of Earth.');
+        }
+        
+        // ==================================================================
+        // LEY LINES DETECTION
+        // ==================================================================
+        
+        function autoDetectLeyLines() {
+            showLoading(true);
+            
+            const threshold = 3; // degrees
+            const visibleSites = getVisibleSites();
+            const detections = [];
+            
+            // Find sites that align within threshold
+            for (let i = 0; i < visibleSites.length && i < 50; i++) {
+                for (let j = i + 1; j < visibleSites.length && j < 50; j++) {
+                    const site1 = visibleSites[i];
+                    const site2 = visibleSites[j];
+                    
+                    // Find other sites that align with this pair
+                    const aligned = [];
+                    const bearing12 = calculateBearing(site1.lat, site1.lng, site2.lat, site2.lng);
+                    
+                    for (let k = 0; k < visibleSites.length && k < 50; k++) {
+                        if (k === i || k === j) continue;
+                        
+                        const site3 = visibleSites[k];
+                        const bearing13 = calculateBearing(site1.lat, site1.lng, site3.lat, site3.lng);
+                        
+                        const angleDiff = Math.abs(bearing12 - bearing13);
+                        if (angleDiff < threshold || angleDiff > 360 - threshold) {
+                            aligned.push(site3);
+                        }
+                    }
+                    
+                    if (aligned.length >= 1) {
+                        detections.push({
+                            sites: [site1, site2, ...aligned],
+                            bearing: bearing12
+                        });
+                    }
+                }
+            }
+            
+            showLoading(false);
+            
+            if (detections.length > 0) {
+                // Draw the longest ley line
+                const longest = detections.reduce((a, b) => a.sites.length > b.sites.length ? a : b);
+                
+                const path = longest.sites.map(s => ({ lat: s.lat, lng: s.lng }));
+                const line = new google.maps.Polyline({
+                    path: path,
+                    strokeColor: '#00BCD4',
+                    strokeWeight: 3,
+                    strokeOpacity: 0.7,
+                    geodesic: true,
+                    map: map
+                });
+                
+                drawings.push(line);
+                
+                showModal('〰️', 'Ley Lines Detected!', 
+                    `Found ${detections.length} potential ley line alignments!<br><br>
+                    <strong>Best Alignment:</strong><br>
+                    ${longest.sites.length} sites aligned<br>
+                    Bearing: ${longest.bearing.toFixed(1)}°<br><br>
+                    ${longest.sites.map(s => s.name).join(' ↔ ')}`);
+            } else {
+                showModal('〰️', 'No Ley Lines', 
+                    'No significant alignments detected. Try adjusting the threshold or viewing a different area.');
+            }
+        }
+        
+        function showEarthGrid() {
+            detectPlatonicSolids(); // Reuse the platonic solids function
+        }
+        
+        function findNearestLeyLine() {
+            showModal('〰️', 'Nearest Ley Line', 
+                'This feature finds the nearest known ley line to your current location.');
+        }
+        
+        function updateLeyLineThreshold(value) {
+            document.getElementById('leyLineThresholdValue').textContent = value + '°';
+        }
+        
+        // ==================================================================
+        // FREQUENCY ZONES
+        // ==================================================================
+        
+        function toggleFrequencyZone(frequency) {
+            if (activeFrequencies.has(frequency)) {
+                // Remove frequency zone
+                activeFrequencies.delete(frequency);
+                if (frequencyOverlays[frequency]) {
+                    frequencyOverlays[frequency].setMap(null);
+                    delete frequencyOverlays[frequency];
+                }
+            } else {
+                // Add frequency zone
+                activeFrequencies.add(frequency);
+                createFrequencyZone(frequency);
+            }
+            
+            updateFrequencyIndicator();
+            event.currentTarget.classList.toggle('active');
+        }
+        
+        function createFrequencyZone(frequency) {
+            const center = map.getCenter();
+            const radius = 500000; // 500km radius
+            
+            const colors = {
+                432: '#FFD700',
+                528: '#00BCD4',
+                963: '#9C27B0',
+                396: '#FF4500',
+                741: '#FFA500'
+            };
+            
+            const circle = new google.maps.Circle({
+                center: center,
+                radius: radius,
+                strokeColor: colors[frequency] || '#FFD700',
+                strokeWeight: 2,
+                strokeOpacity: 0.6,
+                fillColor: colors[frequency] || '#FFD700',
+                fillOpacity: 0.1,
+                map: map
+            });
+            
+            frequencyOverlays[frequency] = circle;
+        }
+        
+        function updateFrequencyIndicator() {
+            const indicator = document.getElementById('frequencyIndicator');
+            if (activeFrequencies.size > 0) {
+                indicator.style.display = 'block';
+            } else {
+                indicator.style.display = 'none';
+            }
+        }
+        
+        // ==================================================================
+        // ASTRONOMY FUNCTIONS
+        // ==================================================================
+        
+        function calculateSunrise() {
+            const center = map.getCenter();
+            showModal('🌅', 'Sunrise Direction', 
+                `Calculating sunrise direction for coordinates: ${center.lat().toFixed(5)}, ${center.lng().toFixed(5)}`);
+        }
+        
+        function calculateSunset() {
+            showModal('🌄', 'Sunset Direction', 
+                'Calculating sunset direction for current location...');
+        }
+        
+        function calculateSolstice() {
+            showModal('☀️', 'Solstice Alignments', 
+                'Analyzing summer and winter solstice alignments for visible sites...');
+        }
+        
+        function calculateEquinox() {
+            showModal('⚖️', 'Equinox Alignments', 
+                'Calculating spring and autumn equinox alignments...');
+        }
+        
+        function starMap() {
+            showModal('✨', 'Star Positions', 
+                'Displaying current positions of major stars and constellations...');
+        }
+        
+        function moonPhase() {
+            const now = new Date();
+            const phase = calculateMoonPhase(now);
+            showModal('🌙', 'Moon Phase', 
+                `Current Moon Phase: ${phase}<br><br>
+                Date: ${now.toLocaleDateString()}<br>
+                Time: ${now.toLocaleTimeString()}`);
+        }
+        
+        function calculateMoonPhase(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            
+            let c = 0, e = 0, jd = 0, b = 0;
+            
+            if (month < 3) {
+                year--;
+                month += 12;
+            }
+            
+            ++month;
+            c = 365.25 * year;
+            e = 30.6 * month;
+            jd = c + e + day - 694039.09;
+            jd /= 29.5305882;
+            b = parseInt(jd);
+            jd -= b;
+            b = Math.round(jd * 8);
+            
+            if (b >= 8) b = 0;
+            
+            const phases = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 
+                          'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'];
+            
+            return phases[b];
+        }
+        
+        // ==================================================================
+        // DISCOVERY FEATURES
+        // ==================================================================
+        
+        function randomSite() {
+            if (allSites.length === 0) {
+                showModal('🎲', 'No Sites', 'No sites loaded yet. Please wait...');
+                return;
+            }
+            
+            const randomIndex = Math.floor(Math.random() * allSites.length);
+            const site = allSites[randomIndex];
+            
+            let lat, lng;
+            if (site.latitude && site.longitude) {
+                lat = parseFloat(site.latitude);
+                lng = parseFloat(site.longitude);
+            } else if (site.lat && site.lng) {
+                lat = parseFloat(site.lat);
+                lng = parseFloat(site.lng);
+            }
+            
+            if (lat && lng) {
+                map.setCenter({ lat, lng });
+                map.setZoom(12);
+                
+                setTimeout(() => {
+                    showSiteInfo(site, lat, lng);
+                }, 500);
+            }
+        }
+        
+        function startTour() {
+            const famousSites = [
+                { name: 'Great Pyramid of Giza', lat: 29.9792, lng: 31.1342 },
+                { name: 'Stonehenge', lat: 51.1789, lng: -1.8262 },
+                { name: 'Machu Picchu', lat: -13.1631, lng: -72.5450 },
+                { name: 'Angkor Wat', lat: 13.4125, lng: 103.8670 },
+                { name: 'Teotihuacan', lat: 19.6925, lng: -98.8438 }
+            ];
+            
+            let currentStop = 0;
+            
+            function nextStop() {
+                if (currentStop < famousSites.length) {
+                    const site = famousSites[currentStop];
+                    map.setCenter({ lat: site.lat, lng: site.lng });
+                    map.setZoom(14);
+                    
+                    showModal('🚶', `Tour Stop ${currentStop + 1}/${famousSites.length}`, 
+                        `<h3 style="color: var(--accent-gold);">${site.name}</h3>
+                        <p style="margin-top: 15px;">Exploring one of the world's most famous ancient sites...</p>`,
+                        currentStop < famousSites.length - 1 ? 'Next Site' : 'Finish Tour',
+                        'Cancel Tour',
+                        () => {
+                            currentStop++;
+                            nextStop();
+                        },
+                        null
+                    );
+                }
+            }
+            
+            nextStop();
+        }
+        
+        // ==================================================================
+        // SEARCH FUNCTIONALITY
+        // ==================================================================
+        
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            
+            if (!query) {
+                showModal('🔍', 'Search', 'Please enter a search term.');
+                return;
+            }
+            
+            showLoading(true);
+            
+            // Check if it's coordinates
+            const coordPattern = /^(-?\d+\.?\d*)[,\s]+(-?\d+\.?\d*)$/;
+            const coordMatch = query.match(coordPattern);
+            
+            if (coordMatch) {
+                const lat = parseFloat(coordMatch[1]);
+                const lng = parseFloat(coordMatch[2]);
+                
+                if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+                    map.setCenter({ lat, lng });
+                    map.setZoom(12);
+                    
+                    const marker = new google.maps.Marker({
+                        position: { lat, lng },
+                        map: map,
+                        animation: google.maps.Animation.DROP
+                    });
+                    
+                    drawings.push(marker);
+                    
+                    showLoading(false);
+                    showModal('📍', 'Location Found', 
+                        `Coordinates: ${lat.toFixed(5)}, ${lng.toFixed(5)}`);
+                    return;
+                }
+            }
+            
+            // Search sites by name
+            const results = allSites.filter(site => {
+                const name = (site.name || site.title || '').toLowerCase();
+                const description = (site.description || site.info || '').toLowerCase();
+                const country = (site.country || site.location || '').toLowerCase();
+                
+                return name.includes(query) || description.includes(query) || country.includes(query);
+            });
+            
+            showLoading(false);
+            
+            if (results.length > 0) {
+                const first = results[0];
+                let lat, lng;
+                
+                if (first.latitude && first.longitude) {
+                    lat = parseFloat(first.latitude);
+                    lng = parseFloat(first.longitude);
+                } else if (first.lat && first.lng) {
+                    lat = parseFloat(first.lat);
+                    lng = parseFloat(first.lng);
+                }
+                
+                if (lat && lng) {
+                    map.setCenter({ lat, lng });
+                    map.setZoom(12);
+                    
+                    setTimeout(() => {
+                        showSiteInfo(first, lat, lng);
+                    }, 500);
+                }
+            } else {
+                showModal('🔍', 'No Results', 
+                    `No sites found matching "${query}". Try different keywords or coordinates.`);
+            }
+        }
+        
+        // Setup enter key for search
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            }
+        });
+        
+        // ==================================================================
+        // TIMELINE FUNCTIONALITY
+        // ==================================================================
+        
+        function initializeTimeline() {
+            const slider = document.getElementById('timelineSlider');
+            const valueDisplay = document.getElementById('timelineValue');
+            
+            slider.addEventListener('input', function() {
+                const year = parseInt(this.value);
+                
+                if (year < 0) {
+                    valueDisplay.textContent = `${Math.abs(year)} BCE`;
+                } else if (year === 2025) {
+                    valueDisplay.textContent = 'All Eras';
+                } else {
+                    valueDisplay.textContent = `${year} CE`;
+                }
+                
+                // Filter and recreate markers
+                createMarkers();
+            });
+        }
+        
+        function filterSitesByTimeline(sites) {
+            const year = parseInt(document.getElementById('timelineSlider').value);
+            
+            if (year === 2025) {
+                return sites; // Show all
+            }
+            
+            return sites.filter(site => {
+                // Simple filtering by era (would need better date parsing in production)
+                const era = (site.era || site.period || site.age || '').toLowerCase();
+                
+                if (year < -5000) {
+                    return era.includes('prehistoric') || era.includes('paleolithic') || era.includes('neolithic');
+                } else if (year < -3000) {
+                    return era.includes('bronze') || era.includes('ancient');
+                } else if (year < 0) {
+                    return era.includes('iron') || era.includes('classical') || era.includes('ancient');
+                } else if (year < 500) {
+                    return era.includes('roman') || era.includes('classical');
+                } else if (year < 1500) {
+                    return era.includes('medieval') || era.includes('middle ages');
+                } else {
+                    return true; // Modern era
+                }
+            });
+        }
+        
+        // ==================================================================
+        // MAP CONTROLS
+        // ==================================================================
+        
+        function toggleMapType() {
+            if (currentMapType === 'roadmap') {
+                map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+                currentMapType = 'satellite';
+            } else {
+                map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+                currentMapType = 'roadmap';
+            }
+        }
+        
+        function toggleLabels() {
+            labelsEnabled = !labelsEnabled;
+            const btn = document.getElementById('labelsBtn');
+            
+            if (labelsEnabled) {
+                btn.classList.add('active');
+                // Show labels
+                map.setOptions({
+                    styles: [
+                        {
+                            featureType: 'water',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#0a1128' }]
+                        },
+                        {
+                            featureType: 'landscape',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#1a1a2e' }]
+                        },
+                        {
+                            featureType: 'administrative.country',
+                            elementType: 'geometry.stroke',
+                            stylers: [{ color: '#6A1B9A' }, { weight: 0.5 }]
+                        }
+                    ]
+                });
+            } else {
+                btn.classList.remove('active');
+                // Hide labels for cleaner look
+                map.setOptions({
+                    styles: [
+                        {
+                            featureType: 'all',
+                            elementType: 'labels',
+                            stylers: [{ visibility: 'off' }]
+                        },
+                        {
+                            featureType: 'water',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#0a1128' }]
+                        },
+                        {
+                            featureType: 'landscape',
+                            elementType: 'geometry',
+                            stylers: [{ color: '#1a1a2e' }]
+                        },
+                        {
+                            featureType: 'administrative.country',
+                            elementType: 'geometry.stroke',
+                            stylers: [{ color: '#6A1B9A' }, { weight: 0.5 }]
+                        }
+                    ]
+                });
+            }
+        }
+        
+        function toggle3D() {
+            terrain3D = !terrain3D;
+            const btn = document.getElementById('3dBtn');
+            
+            if (terrain3D) {
+                btn.classList.add('active');
+                map.setTilt(45);
+            } else {
+                btn.classList.remove('active');
+                map.setTilt(0);
+            }
+        }
+        
+        function toggleStreetView() {
+            showModal('👁️', 'Street View', 
+                'Click on any blue line on the map to enter Street View mode.');
+        }
+        
+        function goToMyLocation() {
+            if (navigator.geolocation) {
+                showLoading(true);
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        
+                        map.setCenter(pos);
+                        map.setZoom(12);
+                        
+                        const marker = new google.maps.Marker({
+                            position: pos,
+                            map: map,
+                            icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                scale: 10,
+                                fillColor: '#4285F4',
+                                fillOpacity: 1,
+                                strokeColor: '#fff',
+                                strokeWeight: 2
+                            },
+                            title: 'Your Location'
+                        });
+                        
+                        drawings.push(marker);
+                        showLoading(false);
+                    },
+                    () => {
+                        showLoading(false);
+                        showModal('❌', 'Location Error', 
+                            'Unable to get your location. Please check your browser permissions.');
+                    }
+                );
+            } else {
+                showModal('❌', 'Not Supported', 
+                    'Geolocation is not supported by your browser.');
+            }
+        }
+        
+        // ==================================================================
+        // TIMELINE FUNCTIONS
+        // ==================================================================
+        
+        function initializeTimeline() {
+            // Initialize both timeline sliders if they exist
+            const mainSlider = document.getElementById('timelineSlider');
+            const panelSlider = document.getElementById('timelinePanelSlider');
+            
+            if (mainSlider) {
+                mainSlider.addEventListener('input', function() {
+                    updateTimelineDisplay(this.value);
+                });
+            }
+            
+            if (panelSlider) {
+                // Already has oninput handler in HTML
+            }
+        }
+        
+        function updateTimelineDisplay(value) {
+            const year = parseInt(value);
+            const displays = [
+                document.getElementById('timelineValue'),
+                document.getElementById('timelinePanelValue')
+            ];
+            
+            let text;
+            if (year < 0) {
+                text = `${Math.abs(year)} BCE`;
+            } else if (year === 2025) {
+                text = 'All Eras';
+            } else {
+                text = `${year} CE`;
+            }
+            
+            displays.forEach(display => {
+                if (display) display.textContent = text;
+            });
+        }
+        
+        function updateTimelineFromPanel(value) {
+            // Sync both sliders
+            const mainSlider = document.getElementById('timelineSlider');
+            const panelSlider = document.getElementById('timelinePanelSlider');
+            
+            if (mainSlider) mainSlider.value = value;
+            if (panelSlider) panelSlider.value = value;
+            
+            updateTimelineDisplay(value);
+            createMarkers(); // Recreate markers with new filter
+        }
+        
+        function setTimelinePeriod(start, end) {
+            updateTimelineFromPanel(end);
+        }
+        
+        // ==================================================================
+        // RIGHT-CLICK CONTEXT MENU
+        // ==================================================================
+        
+        function showContextMenu(event) {
+            const menu = document.getElementById('contextMenu');
+            contextMenuLatLng = event.latLng;
+            
+            menu.style.left = event.pixel.x + 'px';
+            menu.style.top = event.pixel.y + 'px';
+            menu.style.display = 'block';
+        }
+        
+        function hideContextMenu() {
+            document.getElementById('contextMenu').style.display = 'none';
+        }
+        
+        function copyCoordinates() {
+            if (contextMenuLatLng) {
+                const coords = `${contextMenuLatLng.lat().toFixed(5)}, ${contextMenuLatLng.lng().toFixed(5)}`;
+                navigator.clipboard.writeText(coords);
+                showModal('📋', 'Copied!', `Coordinates copied: ${coords}`);
+            }
+            hideContextMenu();
+        }
+        
+        function measureDistance() {
+            measurementMode = 'distance';
+            hideContextMenu();
+            showModal('📏', 'Measure Distance', 
+                'Click on two points on the map to measure the distance between them.');
+        }
+        
+        function measureArea() {
+            measurementMode = 'area';
+            hideContextMenu();
+            showModal('⬛', 'Measure Area', 
+                'Click multiple points to draw a polygon. Double-click to finish.');
+        }
+        
+        function findAntipode() {
+            if (contextMenuLatLng) {
+                const lat = contextMenuLatLng.lat();
+                const lng = contextMenuLatLng.lng();
+                
+                const antipodeLat = -lat;
+                let antipodeLng = lng + 180;
+                if (antipodeLng > 180) antipodeLng -= 360;
+                
+                // Create marker at antipode
+                const marker = new google.maps.Marker({
+                    position: { lat: antipodeLat, lng: antipodeLng },
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 10,
+                        fillColor: '#FF5722',
+                        fillOpacity: 0.9,
+                        strokeColor: '#fff',
+                        strokeWeight: 3
+                    },
+                    title: 'Antipode Point',
+                    animation: google.maps.Animation.DROP
+                });
+                
+                drawings.push(marker);
+                
+                // Draw line
+                const line = new google.maps.Polyline({
+                    path: [
+                        { lat, lng },
+                        { lat: antipodeLat, lng: antipodeLng }
+                    ],
+                    strokeColor: '#FF5722',
+                    strokeWeight: 2,
+                    strokeOpacity: 0.7,
+                    geodesic: true,
+                    map: map
+                });
+                
+                drawings.push(line);
+                
+                // Pan to show both points
+                const bounds = new google.maps.LatLngBounds();
+                bounds.extend({ lat, lng });
+                bounds.extend({ lat: antipodeLat, lng: antipodeLng });
+                map.fitBounds(bounds);
+                
+                showModal('🌍', 'Antipode Found!', 
+                    `Source: ${lat.toFixed(5)}, ${lng.toFixed(5)}<br>
+                    Antipode: ${antipodeLat.toFixed(5)}, ${antipodeLng.toFixed(5)}`);
+            }
+            hideContextMenu();
+        }
+        
+        function detectGeometry() {
+            hideContextMenu();
+            detectGoldenRatio();
+        }
+        
+        function findLeyLines() {
+            hideContextMenu();
+            autoDetectLeyLines();
+        }
+        
+        function starAlignment() {
+            hideContextMenu();
+            calculateSunrise();
+        }
+        
+        function addCustomMarker() {
+            if (contextMenuLatLng) {
+                const marker = new google.maps.Marker({
+                    position: contextMenuLatLng,
+                    map: map,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP
+                });
+                
+                drawings.push(marker);
+                showModal('📍', 'Marker Added', 'Custom marker placed on the map.');
+            }
+            hideContextMenu();
+        }
+        
+        function saveThisLocation() {
+            if (contextMenuLatLng) {
+                const lat = contextMenuLatLng.lat();
+                const lng = contextMenuLatLng.lng();
+                saveToMyPlaces('Custom Location', lat, lng);
+            }
+            hideContextMenu();
+        }
+        
+        // ==================================================================
+        // MY PLACES & COMMUNITY FEATURES
+        // ==================================================================
+        
+        function saveToMyPlaces(name, lat, lng) {
+            const myPlaces = JSON.parse(localStorage.getItem('pyramason_my_places') || '[]');
+            myPlaces.push({
+                name: name,
+                lat: lat,
+                lng: lng,
+                savedAt: new Date().toISOString()
+            });
+            localStorage.setItem('pyramason_my_places', JSON.stringify(myPlaces));
+            
+            showModal('💾', 'Saved!', `"${name}" has been saved to your places.`);
+        }
+        
+        function shareLocation(lat, lng) {
+            const url = `https://pyramason.com?lat=${lat}&lng=${lng}`;
+            navigator.clipboard.writeText(url);
+            showModal('🔗', 'Link Copied!', 
+                'Location link copied to clipboard. Share it with others!');
+        }
+        
+        function streetViewAtLocation(lat, lng) {
+            const panorama = new google.maps.StreetViewPanorama(
+                document.getElementById('map'),
+                {
+                    position: { lat, lng },
+                    pov: { heading: 0, pitch: 0 },
+                    zoom: 1
+                }
+            );
+            
+            map.setStreetView(panorama);
+        }
+        
+        // ==================================================================
+        // HELPER FUNCTIONS
+        // ==================================================================
+        
+        function getVisibleSites() {
+            const bounds = map.getBounds();
+            if (!bounds) return [];
+            
+            return allSites.filter(site => {
+                let lat, lng;
+                if (site.latitude && site.longitude) {
+                    lat = parseFloat(site.latitude);
+                    lng = parseFloat(site.longitude);
+                } else if (site.lat && site.lng) {
+                    lat = parseFloat(site.lat);
+                    lng = parseFloat(site.lng);
+                }
+                
+                if (!lat || !lng) return false;
+                
+                return bounds.contains({ lat, lng });
+            }).map(site => {
+                let lat, lng;
+                if (site.latitude && site.longitude) {
+                    lat = parseFloat(site.latitude);
+                    lng = parseFloat(site.longitude);
+                } else if (site.lat && site.lng) {
+                    lat = parseFloat(site.lat);
+                    lng = parseFloat(site.lng);
+                }
+                
+                return {
+                    ...site,
+                    lat: lat,
+                    lng: lng,
+                    name: site.name || site.title || 'Unknown'
+                };
+            });
+        }
+        
+        function haversineDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Earth's radius in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                     Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+        
+        function calculateBearing(lat1, lng1, lat2, lng2) {
+            const dLng = (lng2 - lng1) * Math.PI / 180;
+            const y = Math.sin(dLng) * Math.cos(lat2 * Math.PI / 180);
+            const x = Math.cos(lat1 * Math.PI / 180) * Math.sin(lat2 * Math.PI / 180) -
+                     Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos(dLng);
+            
+            let bearing = Math.atan2(y, x) * 180 / Math.PI;
+            bearing = (bearing + 360) % 360;
+            
+            return bearing;
+        }
+        
+        function drawTriangle(sites, color) {
+            const path = [
+                { lat: sites[0].lat, lng: sites[0].lng },
+                { lat: sites[1].lat, lng: sites[1].lng },
+                { lat: sites[2].lat, lng: sites[2].lng },
+                { lat: sites[0].lat, lng: sites[0].lng }
+            ];
+            
+            const polygon = new google.maps.Polygon({
+                paths: path,
+                strokeColor: color,
+                strokeWeight: 3,
+                strokeOpacity: 0.8,
+                fillColor: color,
+                fillOpacity: 0.2,
+                geodesic: true,
+                map: map
+            });
+            
+            drawings.push(polygon);
+        }
+        
+        function clearDrawings() {
+            drawings.forEach(drawing => {
+                try {
+                    if (drawing.setMap) drawing.setMap(null);
+                } catch (e) {
+                    console.warn('Error clearing drawing:', e);
+                }
+            });
+            drawings = [];
+            
+            overlays.forEach(overlay => {
+                try {
+                    if (overlay.setMap) overlay.setMap(null);
+                } catch (e) {
+                    console.warn('Error clearing overlay:', e);
+                }
+            });
+            overlays = [];
+            
+            // Clear frequency overlays
+            for (const freq in frequencyOverlays) {
+                if (frequencyOverlays[freq]) {
+                    try {
+                        frequencyOverlays[freq].setMap(null);
+                    } catch (e) {
+                        console.warn('Error clearing frequency overlay:', e);
+                    }
+                }
+            }
+            frequencyOverlays = {};
+            activeFrequencies.clear();
+            
+            // Clear natal chart overlay
+            if (natalChartActive) {
+                clearNatalChartOverlay();
+            }
+            
+            updateFrequencyIndicator();
+            
+            showModal('🧹', 'Map Cleared', 'All drawings, overlays, and analysis results have been cleared.');
+        }
+        
+        function resetView() {
+            // Reset to default center and zoom
+            map.setCenter(CONFIG.DEFAULT_CENTER);
+            map.setZoom(CONFIG.DEFAULT_ZOOM);
+            map.setTilt(0);
+            map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+            
+            // Reset controls
+            currentMapType = 'roadmap';
+            terrain3D = false;
+            document.getElementById('3dBtn')?.classList.remove('active');
+            
+            showModal('🔄', 'View Reset', 'Map view has been reset to default.');
+        }
+        
+        function showLoading(show) {
+            const spinner = document.getElementById('loadingSpinner');
+            if (show) {
+                spinner.classList.add('active');
+            } else {
+                spinner.classList.remove('active');
+            }
+        }
+        
+        // ==================================================================
+        // MODAL SYSTEM
+        // ==================================================================
+        
+        function showModal(icon, title, message, primaryBtnText = 'OK', secondaryBtnText = null, onPrimary = null, onSecondary = null) {
+            const overlay = document.getElementById('modalOverlay');
+            const modalIcon = document.getElementById('modalIcon');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            const primaryBtn = document.getElementById('modalPrimaryBtn');
+            const secondaryBtn = document.getElementById('modalSecondaryBtn');
+            
+            modalIcon.textContent = icon;
+            modalTitle.textContent = title;
+            modalBody.innerHTML = message;
+            primaryBtn.textContent = primaryBtnText;
+            
+            if (secondaryBtnText) {
+                secondaryBtn.textContent = secondaryBtnText;
+                secondaryBtn.style.display = 'inline-block';
+                secondaryBtn.onclick = () => {
+                    closeModal();
+                    if (onSecondary) onSecondary();
+                };
+            } else {
+                secondaryBtn.style.display = 'none';
+            }
+            
+            primaryBtn.onclick = () => {
+                closeModal();
+                if (onPrimary) onPrimary();
+            };
+            
+            overlay.classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+        
+        // ==================================================================
+        // INITIALIZATION
+        // ==================================================================
+        
+        // Check registration status first
+        checkRegistration();
+        
+        // Validate API key
+        if (!CONFIG.GOOGLE_MAPS_API_KEY || CONFIG.GOOGLE_MAPS_API_KEY === 'YOUR_GOOGLE_MAPS_API_KEY') {
+            console.error('Google Maps API key not configured!');
+            setTimeout(() => {
+                showModal('❌', 'Configuration Error', 
+                    'Google Maps API key is not configured. Please add your API key to the CONFIG section.');
+            }, 1000);
+        } else {
+            // Load Google Maps API with callback
+            (function() {
+                const script = document.createElement('script');
+                script.src = `https://maps.googleapis.com/maps/api/js?key=${CONFIG.GOOGLE_MAPS_API_KEY}&callback=initMap&libraries=geometry&v=weekly`;
+                script.async = true;
+                script.defer = true;
+                script.onerror = function() {
+                    console.error('Failed to load Google Maps API');
+                    showModal('❌', 'Loading Error', 
+                        'Failed to load Google Maps API. Please check your API key and internet connection.');
+                };
+                document.head.appendChild(script);
+            })();
+            
+            // Load marker clustering library
+            (function() {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js';
+                script.async = true;
+                document.head.appendChild(script);
+            })();
+        }
+        
+    </script>
+</body>
+</html>
